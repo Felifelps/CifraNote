@@ -1,0 +1,82 @@
+#:kivy 1.9.0
+#:import editpage editpage
+
+<Save@Button>:
+    canvas:
+        Clear
+        Color: 
+            rgba: 0, 0, 0, 1
+        Line:
+            points: self.x + self.width/4, self.y + self.height/4, self.x + self.width/2, self.y, self.x + self.width, self.y + self.height
+            width: dp(5)
+
+<Quit@Button>:
+    canvas:
+        Clear
+        Color: 
+            rgba: 0, 0, 0, 1
+        Line:
+            points: self.x, self.y, self.x +self.width, self.y + self.height
+            width: dp(5)
+        Line:
+            points: self.x, self.y + self.height, self.x +self.width, self.y 
+            width: dp(5)
+
+<ControlBar>:
+    titleinput: _titleinput
+    canvas:
+        Color: 
+            rgba: .22, .22, .22, 1
+        Rectangle:
+            pos: 0, self.height/2
+            size: self.width, self.height/2
+        Color: 
+            rgba: .56, .56, .56, 1
+        Rectangle:
+            pos: 0, 0
+            size: self.width, self.height/2
+
+    Save:
+        pos_hint: {"x":.885, "center_y": 0.75}
+        size_hint: None, .2
+        width: root.height*0.2
+        on_press: root.save()
+    
+    Quit:
+        pos_hint: {"x":.045, "center_y": 0.75}
+        size_hint: None, .2
+        width: root.height*0.2
+        on_press: root.quit()
+    
+    TextInput:
+        id: _titleinput
+        text: ""
+        hint_text: "Título"
+        multiline: False
+        pos_hint: {"center_x": .5, "center_y": 0.25}
+        size_hint: .8, .3
+        font_size: '25sp'
+
+<ToneChangerTextInput>:
+    hint_text: "Digite a cifra"
+    multiline: True
+    foreground_color: 1, 1, 1, 1
+    background_color: 0, 0, 0, 1
+
+<EditPageModel>:
+    textinput: textinput
+    ScrollView:
+        root: root
+        size_hint: 1, .8
+        ToneChangerTextInput:
+            id: textinput
+            root: root
+            text: root.lyric
+            size_hint: 1, None
+            height: max((len(self._lines) + 1) * self.line_height, root.height)
+            font_size: '25sp'
+
+
+
+
+
