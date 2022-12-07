@@ -66,10 +66,12 @@
 <EditPageModel>:
     textinput: textinput
     ScrollView:
+        id: sv
         root: root
         size_hint: 1, .8
         ToneChangerTextInput:
             id: textinput
+            scroll: sv
             root: root
             text: root.lyric
             size_hint: 1, None

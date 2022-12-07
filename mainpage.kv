@@ -1,10 +1,10 @@
 #:kivy 1.9.0
 #:import mainpage mainpage
-<Search@Button>:
+<SearchButton>:
     canvas:
         Clear
         Color: 
-            rgba: .22, .22, .22, 1
+            rgba: 0.38, 0.38, 0.38, 1,
         Rectangle:
             pos: self.x, self.y
             size: self.size
@@ -12,10 +12,10 @@
             rgba: 0, 0, 0, 1
         Line:
             circle: self.x + self.width*0.47, self.y + self.height*0.53, self.width*0.25
-            width: dp(2)
+            width: dp(2.5)
         Line:
-            points: self.x + self.width*0.64, self.y + self.height*0.36, self.x + self.width*0.8, self.y + self.height*0.2
-            width: dp(2)
+            points: self.x + self.width*0.66, self.y + self.height*0.34, self.x + self.width*0.8, self.y + self.height*0.2
+            width: dp(2.5)
 
 <SearchBar>:
     canvas.before:
@@ -23,12 +23,7 @@
             rgba: 0.56, 0.56, 0.56, 1
         Rectangle:
             size: self.width, self.height
-            pos: 0, 0
-    #Search:
-    #    root: root
-    #    size_hint: .125, .7
-    #    pos_hint: {"right": .9, "center_y": .5}
-    #    on_touch_down: lambda intance, touch: root.search       
+            pos: 0, 0      
 
 <FileButton>:
     background_color: 0, 0, 0, 0

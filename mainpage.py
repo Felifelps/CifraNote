@@ -27,13 +27,20 @@ class SearchBar(RelativeLayout):
         self.textinput = TextInput(
             multiline=False,
             text="",
-            size_hint=(.8, .7),
-            pos_hint={"center_x": .5, "center_y": .5},
+            size_hint=(.7, .7),
+            pos_hint={"center_x": .45, "center_y": .5},
             font_size='27sp',
             hint_text="Pesquisar cifra"
-            )
+        )
         self.textinput.bind(on_text_validate=self.search)
         self.add_widget(self.textinput)
+        
+        self.searchbutton = SearchButton(
+            size_hint=(.125, .69),
+            pos_hint={"right": .9, "center_y": .5},
+            on_press=self.search 
+        )
+        self.add_widget(self.searchbutton)
 
     def search(self, instance):
         self.root.filebuttons.remake_organization(self.textinput.text)
@@ -47,7 +54,10 @@ class CreateFileButton(Button):
         manager = self.root.root.manager
         manager.current = 'editpage'
         manager.ids['editpage'].model.new_file()
-    
+
+class SearchButton(Button):
+    pass
+
 class CreditsButton(Button):
     def __init__(self, **kwargs):
         super(CreditsButton, self).__init__(**kwargs)
