@@ -1,0 +1,35 @@
+#:kivy 1.9.0
+#:import tutorialpage tutorialpage
+
+<Back@Button>:
+    canvas:
+        Clear
+        Color: 
+            rgba: 0, 0, 0, 1
+        Line:
+            points: self.x + self.width, self.y + self.height, self.x, self.y + self.height/2, self.x + self.width, self.y
+            width: dp(5) 
+
+<TutorialPage>:
+    name: 'tutorialpage'
+
+<TutorialPageModel@RelativeLayout>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Rectangle:
+            size: self.width, self.height
+            pos: self.x, self.y
+        Color:
+            rgba: 0.56, 0.56, 0.56, 1
+        Rectangle:
+            size: self.width, self.height * 0.095
+            pos: 0, self.height * 0.785 
+
+    Back:
+        pos_hint: {"x":.045, "center_y": 0.75}
+        size_hint: None, .2
+        width: root.height*0.2
+        on_press: root.back_to_mainpage
+
+        

@@ -36,7 +36,7 @@ class SearchBar(RelativeLayout):
         self.add_widget(self.textinput)
         
         self.searchbutton = SearchButton(
-            size_hint=(.125, .69),
+            size_hint=(.125, .725),
             pos_hint={"right": .9, "center_y": .5},
             on_press=self.search 
         )
@@ -75,5 +75,6 @@ class CreditsButton(Button):
         )
         
     def creditspopup(self, instance):
-        self.popup.open()
+        #self.popup.open()
+        self.root.root.manager.current = "tutorialpage"
     

@@ -8,6 +8,7 @@ from kivy.lang import Builder
 
 Builder.load_file('mainpage.kv')
 Builder.load_file('editpage.kv')
+Builder.load_file('tutorialpage.kv')
 
 import sys
 print(sys.platform)
