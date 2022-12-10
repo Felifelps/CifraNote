@@ -52,12 +52,6 @@ class ToneChangerTextInput(TextInput):
             self.text = TONE_CHANGER.change_tone(self.text, old, new)
             root.tonevisor.text = f"Tom: {new}"
             root.tone = new
-        
-    def on_cursor(self, instance, value):
-        one_percent = self.scroll.height/100
-        relative_cursor_pos = 1 - (((self.line_height*self.cursor_row)/one_percent)/100)
-        if self.cursor_pos[1] > self.scroll.height or self.cursor_pos[1] < self.scroll.top - self.scroll.height: self.scroll.scroll_y = relative_cursor_pos
-        return super().on_cursor(instance, value)
     
 class ControlBar(RelativeLayout):
     tone = StringProperty("Auto")

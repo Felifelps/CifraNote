@@ -12,24 +12,46 @@
 
 <TutorialPage>:
     name: 'tutorialpage'
+    TutorialPageModel:
+        root: root
 
 <TutorialPageModel@RelativeLayout>:
-    canvas.before:
-        Color:
-            rgba: 0, 0, 0, 1
-        Rectangle:
-            size: self.width, self.height
-            pos: self.x, self.y
-        Color:
-            rgba: 0.56, 0.56, 0.56, 1
-        Rectangle:
-            size: self.width, self.height * 0.095
-            pos: 0, self.height * 0.785 
-
+    Label:
+        canvas.before:
+            Color:
+                rgba: 0.56, 0.56, 0.56, 1
+            Rectangle:
+                size: self.width, self.height
+                pos: self.x, self.y
+            Color:
+                rgba: 0, 0, 0, 0.5
+            Rectangle:
+                size: self.width, 20
+                pos: self.x, self.y - 20
+        text: "Tutorial"
+        color: 1, 1, 1, 1
+        font_size: '60sp'
+        size_hint: 1, .1
+        pos_hint: {"x": 0, "y": .9}
+    
     Back:
-        pos_hint: {"x":.045, "center_y": 0.75}
-        size_hint: None, .2
-        width: root.height*0.2
-        on_press: root.back_to_mainpage
+        pos_hint: {"x":.025, "center_y": .95}
+        size_hint: None, .05
+        width: root.height*0.05
+        on_press: root.back_to_mainpage()
+    
+    ScrollView:
+        size_hint: .98, .9
+        pos_hint: {"center_x": .5, "top": .9}
+        do_scroll_y: True
+        do_scroll_x: False
+        Label:
+            text: root.tutorial_text
+            font_size: '25sp'
+            foreground_color: 1, 1, 1, 0
+            size_hint_y: None
+            height: self.texture_size[1]
+            text_size: self.width, None
+
 
         
