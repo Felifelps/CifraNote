@@ -87,9 +87,9 @@ class ControlBar(RelativeLayout):
 
     def __popup_creating(self):
         self.popup = AskingPopup(self, size_hint=(.8, .2))
-        self.popup.title = "Salvar alterações?"
-        self.popup.on_no = self.exit
-        self.popup.on_yes = self.save
+        self.popup.title = "Descartar alterações?"
+        self.popup.on_no = self.save
+        self.popup.on_yes = self.exit
 
     def __buttons(self):
         self.sharpbutton = Button(
@@ -122,7 +122,8 @@ class ControlBar(RelativeLayout):
         self.remove_widget(self.tonevisor)
         if self.tonebutton not in list(self.children): self.add_widget(self.tonebutton)
         self.titleinput.text = "Nova cifra"
-        self.tonebutton.text = "Tom: Auto" 
+        self.tonebutton.text = "Tom: Auto"
+        self.popup.title = "Descartar cifra?"
         self.tone = "Auto"
         self.sharpbutton.disabled, self.flatbutton.disabled = True, True
         
@@ -131,10 +132,25 @@ class ControlBar(RelativeLayout):
         
     def exit(self): self.root.root.manager.current = 'mainpage'
     
-    def quit(self): self.popup.open()
+    def check(self):
+        if self.root.textinput.text == "":
+            Popup(title="Digite algo", content=Label(text="Não deixe a cifra vazia!", font_size="25sp"), size_hint=(.8, .2)).open()
+            return False
+        elif self.titleinput.text in FILEMANAGER.files:
+            popup = AskingPopup(self, title="Substituir cifra já existente?", auto_dismiss=False, size_hint=(.9, .2))
+            popup.on_no = print("No")
+            popup.on_yes = print("Yes")
+            popup.open()
+            if popup.on_yes == True:
+                return False
+        return True
+    
+    def quit(self): 
+        if not self.check(): return
+        self.popup.open()
     
     def save(self):
-        FILEMANAGER.save(self.titleinput.text, (TONE_CHANGER.get_tone(self.textinput.text) if self.tone == "Auto" else self.tone), self.textinput.text, self.root.new)
+        FILEMANAGER.save(self.titleinput.text, (TONE_CHANGER.get_tone(self.textinput.text) if self.tone == "Auto" else self.tone), self.textinput.text)
         def close(instance):
             popup.dismiss()
             self.exit()

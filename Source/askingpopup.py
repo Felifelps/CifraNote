@@ -40,7 +40,9 @@ class AskingPopup(Popup):
     def no(self, instance):
         self.dismiss()
         self.on_no()
+        self.on_no = True
 
     def yes(self, instance):
         self.dismiss()
         self.on_yes()
+        self.on_yes = True

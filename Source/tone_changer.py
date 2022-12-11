@@ -128,7 +128,9 @@ class CipherHandler:
         
         major = ""
         for i in counter:
-            if counter[i] > counter[major]: major = i
+            if counter[i] >= counter[major]: major = i
+        if major == "":
+            return "C"
         return major
     
     def change_tone(self, lyric, old_tone, new_tone):

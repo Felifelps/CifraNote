@@ -9,7 +9,7 @@ class ToneDrop(DropDown):
         super(ToneDrop, self).__init__(**kwargs)
         self.mainbutton = mainbutton
         self.mainbutton.bind(on_release=self.open)
-        self.base = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+        self.base = ["Auto", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
         for option in self.base:
             button = Button(text=option, size_hint=(2.75, None), font_size='18sp', on_release=lambda button: self.on_option_select(button), height=dp(40))
             self.add_widget(button)

@@ -8,7 +8,6 @@ from kivy.lang import Builder
 
 Builder.load_file('mainpage.kv')
 Builder.load_file('editpage.kv')
-Builder.load_file('tutorialpage.kv')
 
 import sys
 print(sys.platform)
@@ -20,11 +19,11 @@ class CifraNoteScreenManager(ScreenManager):
     def __init__(self, **kwargs):
         super(CifraNoteScreenManager, self).__init__(**kwargs)
         
-class CifraNoteScreenManagerApp(App):
+class CifraNoteApp(App):
     def build(self):
         return CifraNoteScreenManager()
     
 if __name__ == "__main__":
-    CifraNoteScreenManagerApp().run()
+    CifraNoteApp().run()
 
     

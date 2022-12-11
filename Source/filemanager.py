@@ -11,12 +11,8 @@ class FileManager:
     def update(self):
         self.files = os.listdir(self.main_path)
 
-    def save(self, title, tone, lyric="", new=False):
+    def save(self, title, tone, lyric=""):
         n = 0
-        if new:
-            for i in self.files:
-                if title == i: n += 1
-        title += ("" if n == 0 else f" ({n})")
         with open(os.path.join(self.main_path, f"{title}"), "w") as arq:
             arq.write(f"__TONE__:{tone}\n" + lyric)
         self.update()

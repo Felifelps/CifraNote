@@ -29,7 +29,7 @@ class SearchBar(RelativeLayout):
             text="",
             size_hint=(.8, .7),
             pos_hint={"center_x": .5, "center_y": .5},
-            font_size='27sp',
+            font_size='30sp',
             hint_text="Pesquisar cifra"
         )
         self.textinput.bind(on_text_validate=self.search)
@@ -75,6 +75,5 @@ class CreditsButton(Button):
         )
         
     def creditspopup(self, instance):
-        #self.popup.open()
-        self.root.root.manager.current = "tutorialpage"
+        self.popup.open()
     
