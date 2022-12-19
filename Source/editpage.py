@@ -32,39 +32,49 @@ class EditPageModel(RelativeLayout):
         self.add_widget(self.controlbar)
     
     def load_data(self, title, tone, lyric):
-        self.controlbar.load(title, tone)
+        self.controlbar.update(False, tone, title)
         self.textinput.text = lyric
+        self.textinput.reload()
         self.new = False
     
     def new_file(self):
-        self.controlbar.new()
+        self.controlbar.update(True)
         self.textinput.text = ""
+        self.textinput.reload()
         self.new = True
-
+    
 class ToneChangerTextInput(TextInput):
     def __init__(self, **kwargs):
         super(ToneChangerTextInput, self).__init__(**kwargs)
+        self.changed = False
+        self.reload()
     
     def change_tone(self, root, old, new):
         if self.selection_text != "": 
-            self.text = self.text.replace(self.selection_text, TONE_CHANGER.change_tone(self.selection_text, old, new))
+            new_text = TONE_CHANGER.change_tone(self.selection_text, old, new)
+            self.text = self.text.replace(self.selection_text, new_text)
         else:
             self.text = TONE_CHANGER.change_tone(self.text, old, new)
             root.tonevisor.text = f"Tom: {new}"
             root.tone = new
     
+    def on_text(self, instance, value):
+        if not self.changed: self.changed = True
+        self.states.append(self.text)
+    
+    def reload(self):
+        self.changed = False
+        self.states = [self.text]
+
 class ControlBar(RelativeLayout):
     tone = StringProperty("Auto")
     def __init__(self, root, **kwargs):
         super(ControlBar, self).__init__(**kwargs)
         self.root = root
         self.textinput = root.textinput
-
         self.__tone_visors()
-
         self.__buttons()
-
-        self.__popup_creating()
+        self.popup = AskingPopup(self, "Salvar alterações?", self.save, self.exit)
     
     def __tone_visors(self):
         self.tonevisor = Label(
@@ -85,12 +95,6 @@ class ControlBar(RelativeLayout):
         self.tone_drop.on_selected = lambda: self.root.change_tone(self.tone, self.tone_drop.selected)
         self.add_widget(self.tonebutton)
 
-    def __popup_creating(self):
-        self.popup = AskingPopup(self, size_hint=(.8, .2))
-        self.popup.title = "Descartar alterações?"
-        self.popup.on_no = self.save
-        self.popup.on_yes = self.exit
-
     def __buttons(self):
         self.sharpbutton = Button(
             text="+Semitom",
@@ -110,43 +114,29 @@ class ControlBar(RelativeLayout):
         )
         self.add_widget(self.flatbutton)
     
-    def load(self, title, tone):
-        self.remove_widget(self.tonebutton)
-        if self.tonevisor not in list(self.children): self.add_widget(self.tonevisor)
-        self.titleinput.text = title
-        self.tonevisor.text = f"Tom: {tone}"
-        self.tone = tone
-        self.sharpbutton.disabled, self.flatbutton.disabled = False, False
-    
-    def new(self):
-        self.remove_widget(self.tonevisor)
-        if self.tonebutton not in list(self.children): self.add_widget(self.tonebutton)
-        self.titleinput.text = "Nova cifra"
-        self.tonebutton.text = "Tom: Auto"
-        self.popup.title = "Descartar cifra?"
-        self.tone = "Auto"
-        self.sharpbutton.disabled, self.flatbutton.disabled = True, True
-        
-    def save_actual_tone(self):
-        self.tone = self.tone_drop.selected
+    def update(self, new, tone="Auto", title="Nova cifra"):
+        if not new:
+            self.remove_widget(self.tonebutton)
+            if self.tonevisor not in list(self.children): self.add_widget(self.tonevisor)
+            self.titleinput.text = title
+            self.tonevisor.text = f"Tom: {tone}"
+            self.tone = tone
+            self.sharpbutton.disabled, self.flatbutton.disabled = False, False
+        else:
+            self.remove_widget(self.tonevisor)
+            if self.tonebutton not in list(self.children): self.add_widget(self.tonebutton)
+            self.titleinput.text = "Nova cifra"
+            self.tonebutton.text = "Tom: Auto"
+            self.popup.question = "Salvar cifra?"
+            self.tone = "Auto"
+            self.sharpbutton.disabled, self.flatbutton.disabled = True, True
+            
+    def save_actual_tone(self): self.tone = self.tone_drop.selected
         
     def exit(self): self.root.root.manager.current = 'mainpage'
     
-    def check(self):
-        if self.root.textinput.text == "":
-            Popup(title="Digite algo", content=Label(text="Não deixe a cifra vazia!", font_size="25sp"), size_hint=(.8, .2)).open()
-            return False
-        elif self.titleinput.text in FILEMANAGER.files:
-            popup = AskingPopup(self, title="Substituir cifra já existente?", auto_dismiss=False, size_hint=(.9, .2))
-            popup.on_no = print("No")
-            popup.on_yes = print("Yes")
-            popup.open()
-            if popup.on_yes == True:
-                return False
-        return True
-    
-    def quit(self): 
-        if not self.check(): return
+    def quit(self):
+        if not self.textinput.changed: return self.exit()
         self.popup.open()
     
     def save(self):

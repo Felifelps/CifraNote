@@ -34,8 +34,7 @@ class FileButtons(ScrollView):
                 )
             self.box.add_widget(button)
             n += 1
-        if FILEMANAGER.files == []:
-            self.box.add_widget(Label(text="Não temos cifras no momento", size_hint=(1, None), height=80, font_size=20))
+        if FILEMANAGER.files == []: self.box.add_widget(Label(text="Não temos cifras no momento", size_hint=(1, None), height=80, font_size="25sp"))
         self.size = self.box.size
 
     def remake_organization(self, base_string):
@@ -67,16 +66,13 @@ class FileButton(Button):
         self.root = root
         self.data = FILEMANAGER.load(self.text)
         self.use = True
-        self.popup = AskingPopup(self, size_hint=(.8, .2))
-        self.popup.root = self
+        self.popup = AskingPopup(self, self.text, size_hint=(.8, .2), title=self.text)
         b = BoxPopup()
         b.root = self.popup
-        self.popup.title = self.text
         self.popup.content = b
     
     def delete(self): 
-        new_popup = AskingPopup(self, size_hint=(.8, .2))
-        new_popup.title = "Excluir este arquivo?"
+        new_popup = AskingPopup(self, "Excluir este arquivo?", size_hint=(.8, .2))
         def dismiss():
             new_popup.dismiss()
             self.popup.dismiss()
