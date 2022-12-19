@@ -1,7 +1,7 @@
 import os
 class FileManager:
     def __init__(self):
-        self.main_path = os.path.abspath("Source\\cifras")
+        self.main_path = os.path.abspath("cifras")
         try:
             os.mkdir(self.main_path)
         except:
