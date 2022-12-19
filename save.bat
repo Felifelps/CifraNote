@@ -7,7 +7,5 @@ git commit -m "%commit%"
 git config --global user.name Felifelps
 git config --global user.email felipefelipe23456@gmail.com
 git push https://github.com/Felifelps/CifraNote 
-git config --global user.name Hehe
-git config --global user.email Hehe@gmail.com
 echo Salvo
 pause
