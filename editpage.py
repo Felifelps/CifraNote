@@ -35,13 +35,11 @@ class EditPageModel(RelativeLayout):
         self.controlbar.update(False, tone, title)
         self.textinput.text = lyric
         self.textinput.reload()
-        self.new = False
     
     def new_file(self):
         self.controlbar.update(True)
         self.textinput.text = ""
         self.textinput.reload()
-        self.new = True
     
 class ToneChangerTextInput(TextInput):
     def __init__(self, **kwargs):
@@ -71,6 +69,7 @@ class ControlBar(RelativeLayout):
     def __init__(self, root, **kwargs):
         super(ControlBar, self).__init__(**kwargs)
         self.root = root
+        self.new = True
         self.textinput = root.textinput
         self.__tone_visors()
         self.__buttons()
@@ -92,7 +91,8 @@ class ControlBar(RelativeLayout):
             font_size='18sp'
         )
         self.tone_drop = ToneDrop(self.tonebutton)
-        self.tone_drop.on_selected = lambda: self.root.change_tone(self.tone, self.tone_drop.selected)
+        def c(): self.tone = self.tone_drop.selected
+        self.tone_drop.on_selected = lambda: c()
         self.add_widget(self.tonebutton)
 
     def __buttons(self):
@@ -130,6 +130,7 @@ class ControlBar(RelativeLayout):
             self.popup.question = "Salvar cifra?"
             self.tone = "Auto"
             self.sharpbutton.disabled, self.flatbutton.disabled = True, True
+        self.new = new
             
     def save_actual_tone(self): self.tone = self.tone_drop.selected
         
@@ -140,7 +141,7 @@ class ControlBar(RelativeLayout):
         self.popup.open()
     
     def save(self):
-        FILEMANAGER.save(self.titleinput.text, (TONE_CHANGER.get_tone(self.textinput.text) if self.tone == "Auto" else self.tone), self.textinput.text)
+        FILEMANAGER.save(self.titleinput.text, (TONE_CHANGER.get_tone(self.textinput.text) if self.tone == "Auto" else self.tone), self.textinput.text, self.new)
         def close(instance):
             popup.dismiss()
             self.exit()

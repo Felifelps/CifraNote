@@ -1,0 +1,22 @@
+import os
+with open(os.path.abspath("cifras\Tutorial"), "w") as arq:
+    arq.write('''__TONE__:C
+Seja bem-vindo ao CifraNote!!
+
+Desenvolvi esse aplicativo para servir como bloco de notas para cifras, com a funcionalidade especial de trocar o tom das cifras.
+
+Para criar uma nova cifra, clique no botão de "+" na página inicial. 
+
+Para excluir um arquivo, basta apertar e segurar no botão do seu nome até aparecer a função "Excluir". Clique e confirme.
+
+A caixa de texto com o nome "Tutorial" acima serve para alterar o nome do arquivo. 
+
+Para trocar o tom de uma cifra, use os botões "-Semitom" e "+Semitom" para diminuir ou aumentar, respectivamente, o tom da cifra atual.
+
+Lembre sempre de salvar a cifra antes de sair.
+
+Tente trocar o tom: 
+C G Am F
+
+Aproveite o aplicativo!!
+''')
