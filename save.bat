@@ -6,6 +6,6 @@ set /p commit=Enter Commit:
 git commit -m "%commit%"
 git config --global user.name Felifelps
 git config --global user.email felipefelipe23456@gmail.com
-git push https://github.com/Felifelps/CifraNote 
+git push https://github.com/Felifelps/CifraNote v2.0
 echo Salvo
 pause
