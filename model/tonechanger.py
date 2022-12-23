@@ -1,5 +1,5 @@
-class CipherHandler:
-    MAJOR_SCALES = {
+class ToneChanger:
+    NOTES_RELATION = {
         "C":  {"C": 1, "C#": 2, "Db": 2, "D": 3, "D#": 4, "Eb": 4, "E": 5, "F": 6, "F#": 7, "Gb": 7, "G": 8, "G#": 9,  "Ab": 9, "A": 10, "A#": 11, "Bb": 11, "B": 12},
         "C#":  {"C": 12, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,  "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11},
         "Db":  {"C": 12, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8,  "Ab": 8, "A": 9, "A#": 10, "Bb": 10, "B": 11},
@@ -86,9 +86,9 @@ class CipherHandler:
             final_chord = self.change_chord(chord.split('/')[0], old_tone, new_tone) + "/" + self.change_chord(chord.split('/')[1], old_tone, new_tone)
             return final_chord
         for i in notes:
-            index = self.MAJOR_SCALES[old_tone][basic_note]
-            for note in self.MAJOR_SCALES[new_tone]:
-                if self.MAJOR_SCALES[new_tone][note] == index:
+            index = self.NOTES_RELATION[old_tone][basic_note]
+            for note in self.NOTES_RELATION[new_tone]:
+                if self.NOTES_RELATION[new_tone][note] == index:
                     return chord.replace(basic_note, note)
 
     def is_chord(self, string):
@@ -132,8 +132,51 @@ class CipherHandler:
         if major == "":
             return "C"
         return major
+
+    def semitone_chord(self, chord, semitones):
+        #1 : sharp, -1 : flat, 0 : None
+        basic_note = ""
+        notes = []
+        for i in chord: 
+            if i == "/":
+                notes.append(basic_note)
+                basic_note = ""
+            elif i in "CDEFGAB#b": 
+                basic_note += i
+        notes.append(basic_note)
+        if len(notes) > 1:
+            final_chord = self.semitone_chord(chord.split('/')[0], semitones) + "/" + self.semitone_chord(chord.split('/')[1], semitones)
+            return final_chord
+        note = notes[0]
+        new_note = self.NOTE_POSITION[(self.NOTES_RELATION["C"][note] + semitones)%12 if (self.NOTES_RELATION["C"][note] + semitones)%12 != 0 else 12]
+        return chord.replace(note, new_note)
+            
+    def semitone_lyric(self, lyric, semitones):
+        #1 : sharp, -1 : flat, 0 : None
+        new_lyric = []
+        chord_lines = self.chord_lines(lyric)
+        n = 0
+        for line in lyric.split("\n"):
+            if n in chord_lines:
+                cline = line
+                chords = self.order_of_chords(line.split())
+                for chord in chords:
+                    if self.is_chord(chord): 
+                        cline = "@@".join(cline.split(chord))
+                parts = cline.split("@@")
+                new_line = ""
+                x = 0
+                for chord in line.split():
+                    if self.is_chord(chord):
+                        new_line += parts[x] + self.semitone_chord(chord, semitones)
+                        x += 1
+                new_lyric.append(new_line)
+            else:
+                new_lyric.append(line)
+            n += 1
+        return "\n".join(new_lyric)
     
-    def change_tone(self, lyric, old_tone, new_tone):
+    def change_tone(self, lyric, old_tone="", new_tone=""):
         new_lyric = []
         chord_lines = self.chord_lines(lyric)
         n = 0
@@ -156,5 +199,5 @@ class CipherHandler:
                 new_lyric.append(line)
             n += 1
         return "\n".join(new_lyric)
-                        
-TONE_CHANGER = CipherHandler()
+    
+TONECHANGER = ToneChanger()

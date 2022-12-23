@@ -11,7 +11,7 @@ class FileManager:
         
     def update(self): self.files = os.listdir(self.main_path)
 
-    def save(self, title, tone, lyric, new):
+    def save(self, title, lyric, new):
         if new:
             n = 0
             while 1:
@@ -20,26 +20,24 @@ class FileManager:
                     title += " (1)"
                     n = 0
                 n += 1
-        with open(os.path.join(self.main_path, f"{title}"), "w") as arq:
-            arq.write(f"__TONE__:{tone}\n" + lyric)
+        with open(os.path.join(self.main_path, f"{title}"), "w") as arq: arq.write(lyric)
         self.update()
         
     def load(self, title):
-        try:
-            with open(os.path.join(self.main_path, f"{title}"), "r") as arq:
-                all = arq.readlines()
-        except:
-            return 'Erro na leitura do arquivo'
-        return {"tone": all[0].replace("__TONE__:", "").replace("\n", ""), "lyric": "".join(all[1:])}
+        try: 
+            with open(os.path.join(self.main_path, f"{title}"), "r") as arq: return "".join(arq.readlines())
+        except: return 'Erro na leitura do arquivo'
     
     def delete(self, title):
         os.remove(os.path.join(self.main_path, f"{title}"))
         self.update()     
            
 FILEMANAGER = FileManager()
+
 if "__Tutorial__" in FILEMANAGER.files:
-    FILEMANAGER.save("__Tutorial__", "C", '''
-Seja bem-vindo ao CifraNote!!
+    FILEMANAGER.save(
+        "__Tutorial__", 
+        '''Seja bem-vindo ao CifraNote!!
 
 Desenvolvi esse aplicativo para servir como bloco de notas para cifras, com a funcionalidade especial de trocar o tom das cifras.
 
@@ -56,8 +54,5 @@ Lembre sempre de salvar a cifra antes de sair.
 Tente trocar o tom: 
 C G Am F
 
-Aproveite o aplicativo!!
-    ''', False)
-        
-
-
+Aproveite o aplicativo!!''', 
+        False)
