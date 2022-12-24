@@ -1,0 +1,20 @@
+#:kivy 1.9.0
+
+<OptionsButton@Spinner>:
+    canvas:
+        Clear
+        Color:
+            rgba: 1, 1, 1, 1
+        Line: 
+            points: self.width/2, self.height*0.75
+            width: 3
+        Line: 
+            points: self.width/2, self.height*0.5
+            width: 3
+        Line: 
+            points: self.width/2, self.height*0.25
+            width: 3
+
+    values: "a", "b", "c"
+    text: "a"
+    on_text: lambda: print("hi")

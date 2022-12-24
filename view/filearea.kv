@@ -1,25 +1,17 @@
 #:kivy 1.9.0
-
-<FileArea@PageLayout>:
+#:include view\filepage.kv
+<FileArea@Carousel>:
     canvas:
         Color:
-            rgba: 0, 1, 0, 1
+            rgba: .25, .25, .25, 1
         Rectangle:
             pos: 0, 0
             size: self.width, self.height
-    BoxLayout:
-        orientation: 'vertical'
-        Label: 
-            text: "1"
-        Label: 
-            text: "1"
-        Label: 
-            text: "1"
-    BoxLayout:
-        orientation: 'vertical'
-        Label: 
-            text: "2"
-        Label: 
-            text: "2"
-        Label: 
-            text: "2"
+    
+    FilePage:
+        title: "A"
+        content: "B"
+    
+    FilePage:
+        title: "B"
+        content: "C"

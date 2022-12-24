@@ -1,4 +1,5 @@
 #:kivy 1.9.0
+#:include view\optionsbutton.kv
 
 <OptionsBar@RelativeLayout>:
     canvas:
@@ -8,4 +9,11 @@
             pos: 0, 0
             size: self.width, self.height
     Label:
-        text: "Options Bar"
+        text: "CifraNote"
+        font_size: "28sp"
+        pos_hint: {"x": .04, "y": 0}
+        size_hint: .25, 1
+    
+    OptionsButton:
+        size_hint: .05, .9
+        pos_hint: {"right": 1, "center_y": .5}
