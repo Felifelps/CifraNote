@@ -1,20 +1,28 @@
 #:kivy 1.9.0
+#:import optionsbutton view.optionsbutton
+<OptionButton>:
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: .95, .95, .95, 1
+        Rectangle:
+            size: self.size
+            pos: self.x, self.y
+    color: 0, 0, 0, 1
 
-<OptionsButton@Spinner>:
+<OptionsButton>:
     canvas:
         Clear
         Color:
             rgba: 1, 1, 1, 1
-        Line: 
-            points: self.width/2, self.height*0.75
-            width: 3
-        Line: 
-            points: self.width/2, self.height*0.5
-            width: 3
-        Line: 
-            points: self.width/2, self.height*0.25
-            width: 3
+        Ellipse:
+            size: dp(8), dp(8)
+            pos: self.x + self.width/2 - dp(4), self.y + self.height*0.75  - dp(4)
+        Ellipse:
+            size: dp(8), dp(8)
+            pos: self.x + self.width/2 - dp(4), self.y + self.height*0.5 - dp(4)
+        Ellipse:
+            size: dp(8), dp(8)
+            pos: self.x + self.width/2 - dp(4), self.y + self.height*0.25 - dp(4)
 
-    values: "a", "b", "c"
-    text: "a"
-    on_text: lambda: print("hi")
+    values: "Abrir nota", "Renomear nota", "Excluir nota", "Configurações"
