@@ -1,0 +1,13 @@
+#:kivy 1.9.0
+
+<CreateFileButton@Button>:
+    canvas:
+        Clear
+        Color: 
+            rgba: 1, 1, 1, 1
+        Line:
+            points: self.x + self.width/2, self.y + self.height*0.75, self.x + self.width/2, self.y + self.height*0.25
+            width: dp(2) 
+        Line:
+            points: self.x + self.width*0.25, self.y + self.height/2, self.x + self.width*0.75, self.y + self.height/2
+            width: dp(2)
