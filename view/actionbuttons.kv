@@ -1,0 +1,83 @@
+#:kivy 1.9.0
+#:import optionsbutton view.optionsbutton
+#:import Control control.control.Control
+
+<OptionButton>:
+    control: Control(self)
+    background_color: 0, 0, 0, 0
+    canvas.before:
+        Color:
+            rgba: .95, .95, .95, 1
+        Rectangle:
+            size: self.size
+            pos: self.x, self.y
+    color: 0, 0, 0, 1
+
+<OptionsButton>:
+    control: Control(self)
+    canvas:
+        Clear
+        Color:
+            rgba: 1, 1, 1, 1
+        Ellipse:
+            size: dp(6), dp(6)
+            pos: self.x + self.width/2 - dp(3), self.y + self.height*0.75  - dp(3)
+        Ellipse:
+            size: dp(6), dp(6)
+            pos: self.x + self.width/2 - dp(3), self.y + self.height*0.5 - dp(3)
+        Ellipse:
+            size: dp(6), dp(6)
+            pos: self.x + self.width/2 - dp(3), self.y + self.height*0.25 - dp(3)
+
+    values: "Abrir nota", "Renomear nota", "Excluir nota", "Configurações"
+
+<CreateFileButton@Button>:
+    control: Control(self)
+    canvas:
+        Clear
+        Color: 
+            rgba: 1, 1, 1, 1
+        Line:
+            points: self.x + self.width/2, self.y + self.height*0.75, self.x + self.width/2, self.y + self.height*0.25
+            width: dp(2) 
+        Line:
+            points: self.x + self.width*0.25, self.y + self.height/2, self.x + self.width*0.75, self.y + self.height/2
+            width: dp(2)
+
+<UndoButton@Button>:
+    control: Control(self)
+    canvas:
+        Clear
+        Color:
+            rgba: 1, 1, 1, 1
+        Line:
+            ellipse: self.x + self.width*0.1, self.y - self.height*0.25, self.width*0.8, self.height*0.8, 300, 420
+            width: dp(2)
+        Triangle:
+            points: self.x + self.width*0.1, self.y + self.height*0.6, self.x  + self.width*0.1, self.y + self.height*0.3, self.x + self.width*0.4, self.y + self.height*0.3
+
+<RedoButton@Button>:
+    control: Control(self)
+    canvas:
+        Clear
+        Color:
+            rgba: 1, 1, 1, 1
+        Line:
+            ellipse: self.x + self.width*0.1, self.y - self.height*0.25, self.width*0.8, self.height*0.8, 300, 420
+            width: dp(2)
+        Triangle:
+            points: self.x + self.width*0.9, self.y + self.height*0.6, self.x + self.width*0.9, self.y + self.height*0.3, self.x + self.width*0.6, self.y + self.height*0.3
+
+<FlatButton@Button>:
+    control: Control(self)
+    background_color: 0, 0, 0, 0
+    text: "[b][i]b[/i][/b]"
+    markup: True
+    font_size: "25sp"
+
+<SharpButton@Button>:
+    control: Control(self)
+    background_color: 0, 0, 0, 0
+    text: "[b][i]#[/i][/b]"
+    markup: True
+    font_size: "25sp"

@@ -1,16 +1,21 @@
 #:kivy 1.9.0
-#:include view\optionsbutton.kv
-#:include view\createfilebutton.kv
-#:include view\redoundobuttons.kv
-#:include view\tonebuttons.kv
+#:include view\actionbuttons.kv
+#:import optionsbar view.optionsbar
+#:import Control control.control.Control
 
-<OptionsBar@RelativeLayout>:
+<OptionsBar>:
+    control: Control(self)
     canvas:
         Color:
-            rgba: 0, 0, .8, 1
+            rgba: 0, 0, .6, 1
         Rectangle:
             pos: 0, 0
             size: self.width, self.height
+        Color:
+            rgba: 0, 0, 0, .7
+        Rectangle:
+            pos: 0, -20
+            size: self.width, self.height + 20
     Label:
         text: "[b]CifraNote[/b]"
         markup: True

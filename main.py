@@ -11,10 +11,8 @@ if "win" in sys.platform:
     Window.size = (dp(400), dp(700))
     
 class CifraNoteApp(App):
-    def build(self):
-        return MainPage()
+    def build(self): return MainPage()
     
-if __name__ == "__main__":
-    CifraNoteApp().run()
+if __name__ == "__main__": CifraNoteApp().run()
 
     

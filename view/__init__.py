@@ -1,4 +1,6 @@
 __all__ = [
     'mainpage',
-    'optionsbutton'
+    'optionsbutton',
+    'filearea',
+    'optionsbar'
 ]

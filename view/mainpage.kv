@@ -1,8 +1,10 @@
 #:kivy 1.9.0
 #:include view\optionsbar.kv
 #:include view\filearea.kv
+#:import Control control.control.Control
 
 <MainPage>:
+    control: Control(self)
     canvas.before:
         Color:
             rgba: 0, 0, 0, 1

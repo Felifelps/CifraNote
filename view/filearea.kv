@@ -1,6 +1,9 @@
 #:kivy 1.9.0
-#:include view\filepage.kv
-<FileArea@Carousel>:
+#:import filearea view.filearea
+#:import Control control.control.Control
+
+<FileArea>:
+    control: Control(self)
     canvas:
         Color:
             rgba: .25, .25, .25, 1
@@ -9,9 +12,31 @@
             size: self.width, self.height
     
     FilePage:
-        title: "A"
-        content: ""
+        title: "Nota geral"
+
+<FilePage>:
+    control: Control(self)
+    title: ""
+    content: ""
+    canvas:
+        Color:
+            rgba: .25, .25, .25, 1
+        Rectangle:
+            pos: 0, 0
+            size: self.width, self.height
     
-    FilePage:
-        title: "B"
-        content: ""
+    Label:
+        text: root.title
+        size_hint: 1, .06
+        pos_hint: {"center_x": .5, "top": 1}
+        font_size: "16sp"
+
+    TextInput:
+        multiline: True
+        text: root.content
+        size_hint: .98, .94
+        pos_hint: {"center_x": .5, "y": 0}
+        font_size: "16sp"
+        background_color: 0, 0, 0, 0
+        foreground_color: 1, 1, 1, 1
+        hint_text: "Digite a cifra aqui"
