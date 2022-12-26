@@ -1,10 +1,10 @@
 #:kivy 1.9.0
 #:include view\optionsbar.kv
 #:include view\filearea.kv
-#:import Control control.control.Control
+#:import CONTROL control.control.CONTROL
 
 <MainPage>:
-    control: Control(self)
+    control: CONTROL.save_instance(self, "mainpage")
     canvas.before:
         Color:
             rgba: 0, 0, 0, 1
@@ -18,4 +18,6 @@
     FileArea:
         size_hint: 1, .94
         pos_hint: {"y": 0, "center_x": .5}
+    
+    
     

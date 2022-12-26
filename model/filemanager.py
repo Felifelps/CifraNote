@@ -9,18 +9,10 @@ class FileManager:
             pass
         self.update()
         
-    def update(self): self.files = os.listdir(self.main_path)
+    def update(self): self.files = list(map(lambda x: x.lower(), os.listdir(self.main_path)))
 
-    def save(self, title, lyric, new):
-        if new:
-            n = 0
-            while 1:
-                if n == len(self.files): break
-                elif self.files[n] == title:
-                    title += " (1)"
-                    n = 0
-                n += 1
-        with open(os.path.join(self.main_path, f"{title}"), "w") as arq: arq.write(lyric)
+    def save(self, title, lyric):
+        with open(os.path.join(self.main_path, f"{title.lower()}"), "w") as arq: arq.write(lyric)
         self.update()
         
     def load(self, title):
@@ -54,5 +46,4 @@ Lembre sempre de salvar a cifra antes de sair.
 Tente trocar o tom: 
 C G Am F
 
-Aproveite o aplicativo!!''', 
-        False)
+Aproveite o aplicativo!!''')

@@ -1,9 +1,9 @@
 #:kivy 1.9.0
 #:import filearea view.filearea
-#:import Control control.control.Control
+#:import CONTROL control.control.CONTROL
 
 <FileArea>:
-    control: Control(self)
+    control: CONTROL.save_instance(self, "filearea")
     canvas:
         Color:
             rgba: .25, .25, .25, 1
@@ -15,7 +15,7 @@
         title: "Nota geral"
 
 <FilePage>:
-    control: Control(self)
+    control: CONTROL.save_instance(self, "filepage")
     title: ""
     content: ""
     canvas:

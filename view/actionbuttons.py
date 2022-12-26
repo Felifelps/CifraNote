@@ -3,6 +3,11 @@ from kivy.uix.dropdown import DropDown
 from kivy.properties import BooleanProperty, ListProperty
 from kivy.metrics import dp
 
+class CreateFileButton(Button):
+    def on_press(self):
+        self.control.popups["filenamepopup"].open()
+        return super().on_press()
+
 class OptionButton(Button):
     pass
     
@@ -37,4 +42,3 @@ class OptionsButton(Button):
         else:
             self.size_hint = (.1, .9)
             self.pos_hint = {"right": 1, "center_y": 0.5}
-    

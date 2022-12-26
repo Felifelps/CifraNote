@@ -1,10 +1,10 @@
 #:kivy 1.9.0
 #:include view\actionbuttons.kv
 #:import optionsbar view.optionsbar
-#:import Control control.control.Control
+#:import CONTROL control.control.CONTROL
 
 <OptionsBar>:
-    control: Control(self)
+    control: CONTROL.save_instance(self, "optionsbar")
     canvas:
         Color:
             rgba: 0, 0, .6, 1
