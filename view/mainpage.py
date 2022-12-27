@@ -7,7 +7,5 @@ Builder.load_file('view\\mainpage.kv')
 class MainPage(RelativeLayout):
     def __init__(self, **kwargs):
         super(MainPage, self).__init__(**kwargs)
-        fnp = FileNamePopup(self)
-        self.add_widget(fnp)
         self.fastpopup = FastPopup(self)
         self.add_widget(self.fastpopup)

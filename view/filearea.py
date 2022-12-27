@@ -7,9 +7,12 @@ class FileArea(Carousel):
             
     def add_page(self, title):
         x = FilePage()
-        x.title, x.content = title, ""
+        x.title = title
         self.add_widget(x)
         self.load_slide(x)
+    
+    def load_slide(self, slide):
+        return super().load_slide(slide)
         
 class FilePage(RelativeLayout):
     pass
