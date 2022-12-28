@@ -5,7 +5,7 @@ from kivy.metrics import dp
 
 class CreateFileButton(Button):
     def on_press(self):
-        self.control.mainpage.fnp.open()
+        self.control.fnp.open()
         return super().on_press()
 
 class OptionButton(Button):
@@ -33,8 +33,7 @@ class OptionsButton(Button):
     def on_select(self, value):
         self.dropdown.select(value)
         self.is_open = False
-        print(value)
-        if value == "Excluir nota": self.control.mainpage.dfp.open()
+        if value == "Excluir nota": self.control.dfp.open()
     
     def on_is_open(self, instance, value):
         if self.is_open:

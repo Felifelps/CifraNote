@@ -1,71 +1,58 @@
 from control.control import CONTROL
 from kivy.lang import Builder
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.animation import Animation
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 from kivy.clock import Clock
 
 Builder.load_file("view\\popups.kv")
     
-class FileNamePopup(RelativeLayout):
-    is_open = False
-    open_anim = Animation(opacity=1, duration=0.25)
-    close_anim = Animation(opacity=0, duration=0.25)
+class FileNamePopup(Popup):
     def __init__(self, **kwargs):
         super(FileNamePopup, self).__init__(**kwargs) 
-        self.control = CONTROL
-        self.opacity = 0
+        self.control = CONTROL.save_instance(self, "fnp")
+        self.content = FileNamePopupContent(self)
+    
+    def open(self, *_args, **kwargs):
+        self.content.textinput.text = ""
+        self.content.save.disabled = False
+        return super().open(*_args, **kwargs)
 
-    def open(self):
-        self.textinput.text = ""
-        self.save.disabled = False
-        self.open_anim.start(self)
-        self.is_open = True
+class FileNamePopupContent(RelativeLayout):
+    kivy_file_done = BooleanProperty(False)
+    def __init__(self, root, **kwargs):
+        self.root = root
+        super(FileNamePopupContent, self).__init__(**kwargs)
     
-    def dismiss(self):
-        self.close_anim.start(self)
-        self.is_open = False
-        del self
-    
-    def on_touch_down(self, touch):
-        if not self.collide_point(touch.x, touch.y) or self.cancel.collide_point(touch.x, touch.y): self.dismiss()
-        return super().on_touch_down(touch)
-    
-class DeleteFilePopup(RelativeLayout):
-    is_open = False
-    open_anim = Animation(opacity=1, duration=0.25)
-    close_anim = Animation(opacity=0, duration=0.25)
-    current = StringProperty("")
+    def on_kivy_file_done(self, instance, value):
+        if self.kivy_file_done:
+            self.cancel.bind(on_press=self.root.dismiss)
+            self.save.bind(on_press=lambda a: self.root.control.create_new_file_page())
+ 
+class DeleteFilePopup(Popup):
     def __init__(self, **kwargs):
         super(DeleteFilePopup, self).__init__(**kwargs) 
-        self.control = CONTROL
-        self.opacity = 0
-        self.__finished = False
+        self.control = CONTROL.save_instance(self, "dfp")
+        self.content = DeleteFilePopupContent(self)
     
-    def __final_configurations(self):
-        self.cancel.bind(on_press=lambda x: self.dismiss())
-        self.delete.bind(on_press=lambda x: self.control.delete_file_page())
+    def open(self, *_args, **kwargs):
+        self.content.question.text = f"Quer mesmo apagar '{self.control.filearea.current_slide.title}' ?"
+        self.content.delete.disabled = False
+        return super().open(*_args, **kwargs)
     
-    def initial_configurations(self):
-        self.delete.disabled = False
-        self.current = self.control.filearea.current_slide.title
-        
-    def open(self):
-        if not self.__finished: self.__final_configurations()
-        self.initial_configurations()
-        self.open_anim.start(self)
-        self.is_open = True
+class DeleteFilePopupContent(RelativeLayout):
+    kivy_file_done = BooleanProperty(False)
+    def __init__(self, root, **kwargs): 
+        self.root = root
+        super(DeleteFilePopupContent, self).__init__(**kwargs)
     
-    def dismiss(self):
-        self.close_anim.start(self)
-        self.is_open = False
-        del self
-    
-    def on_touch_down(self, touch):
-        if not self.collide_point(touch.x, touch.y) or self.cancel.collide_point(touch.x, touch.y): self.dismiss()
-        return super().on_touch_down(touch)
-    
+    def on_kivy_file_done(self, instance, value):
+        if self.kivy_file_done:
+            self.cancel.bind(on_press=self.root.dismiss)
+            self.delete.bind(on_press=lambda a: self.root.control.delete_file_page())       
+
 class FastPopup(Label):
     def __init__(self, root, **kwargs):
         super(FastPopup, self).__init__(**kwargs) 
@@ -80,5 +67,5 @@ class FastPopup(Label):
         del self
         
     
-        
+
         

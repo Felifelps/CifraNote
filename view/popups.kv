@@ -1,17 +1,18 @@
 #:kivy 1.9.0
 
 <FileNamePopup>:
-    size_hint: .8, .2
+    size_hint: .8, .3
     pos_hint: {"center_x": .5, "center_y": .5}
+    background_color: 0, 0, 0, 0
+    title_color: 0, 0, 0, 0
+    separator_color: 0, 0, 0, 0
+
+<FileNamePopupContent>:
     save: _save
     cancel: _cancel
     textinput: _textinput
+    kivy_file_done: True
     canvas.before:
-        Color:
-            rgba: 0, 0, 0, .5
-        Rectangle:
-            pos: dp(-1000), dp(-1000)
-            size: dp(2000), dp(2000)
         Color:
             rgba: .2, .2, .2, 1
         RoundedRectangle:
@@ -56,30 +57,20 @@
         font_size: "20sp"
         size_hint: .4, .33
         pos_hint: {"right": .6, "y": 0}
-    
-<FastPopup>:
-    size_hint: .5, .08
-    pos_hint: {"center_x": .5, "center_y": .08}
-    canvas.before:
-        Color:
-            rgba: .2, .2, .2, 1
-        RoundedRectangle:
-            pos: self.x, self.y
-            size: self.width, self.height
-            radius: [20]
-    font_size: "20sp"
 
 <DeleteFilePopup>:
     size_hint: .8, .2
     pos_hint: {"center_x": .5, "center_y": .5}
+    background_color: 0, 0, 0, 0
+    title_color: 0, 0, 0, 0
+    separator_color: 0, 0, 0, 0
+
+<DeleteFilePopupContent>:
+    question: _question
     delete: _delete
     cancel: _cancel
+    kivy_file_done: True
     canvas.before:
-        Color:
-            rgba: 0, 0, 0, .5
-        Rectangle:
-            pos: dp(-1000), dp(-1000)
-            size: dp(2000), dp(2000)
         Color:
             rgba: .2, .2, .2, 1
         RoundedRectangle:
@@ -88,7 +79,8 @@
             radius: [30]
     
     Label:
-        text: "Quer mesmo excluir '" + root.current + "'? "
+        id: _question
+        text: ""
         font_size: "20sp"
         size_hint: 1, .33
         pos_hint: {"center_x": .5, "y": .6}
@@ -109,3 +101,14 @@
         size_hint: .4, .33
         pos_hint: {"x": .05, "y": .05}
     
+<FastPopup>:
+    size_hint: .5, .08
+    pos_hint: {"center_x": .5, "center_y": .08}
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        RoundedRectangle:
+            pos: self.x, self.y
+            size: self.width, self.height
+            radius: [20]
+    font_size: "20sp"

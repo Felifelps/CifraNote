@@ -1,21 +1,15 @@
 #:kivy 1.9.0
 #:import filearea view.filearea
-#:import CONTROL control.control.CONTROL
 
 <FileArea>:
-    control: CONTROL.save_instance(self, "filearea")
     canvas:
         Color:
-            rgba: .25, .25, .25, 1
+            rgba: .25, .25, .25, 0
         Rectangle:
             pos: 0, 0
             size: self.width, self.height
-    
-    FilePage:
-        title: "Nota geral"
 
 <FilePage>:
-    control: CONTROL.save_instance(self, "filepage")
     title: ""
     content: ""
     canvas:
@@ -24,6 +18,11 @@
         Rectangle:
             pos: 0, 0
             size: self.width, self.height
+        Color:
+            rgba: 0, 0, 0, .6
+        Line:
+            rectangle: self.x - dp(0.5), self.y - dp(0.5), self.width + dp(1), self.height + dp(1)
+            width: dp(0.5)
     
     Label:
         text: root.title
