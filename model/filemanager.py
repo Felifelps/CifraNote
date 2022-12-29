@@ -12,7 +12,7 @@ class FileManager:
     def update(self): self.files = list(map(lambda x: x.lower(), os.listdir(self.main_path)))
 
     def save(self, title, lyric):
-        with open(os.path.join(self.main_path, f"{title.lower()}"), "w") as arq: arq.write(lyric)
+        with open(os.path.join(self.main_path, f"{title}"), "w") as arq: arq.write(lyric)
         self.update()
         
     def load(self, title):

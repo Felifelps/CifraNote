@@ -10,9 +10,25 @@ class Control:
         return self
     
     def load_files(self):
-        for i in self.fm.files: 
-            self.filearea.add_page(i)
-        self.filearea.load_slide(self.filearea.slides[0])
+        cache = self.load_files_cache()
+        for file in cache["order"]: self.filearea.add_page(file, self.fm.load(file), False)
+        if cache["order"] == []: cache["last"] = self.filearea.add_page("Nota Geral", "", False)
+        self.filearea.load_slide(cache["last"])
+    
+    def save_files_cache(self): 
+        string = ""
+        for slide in self.filearea.slides: string += slide.title + "\n"
+        string += self.filearea.current_slide.title
+        with open("cache", "w") as arq: arq.write(string) 
+    
+    def load_files_cache(self):
+        cache = {"order": None, "last": None}
+        with open("cache", "r") as arq: alist = arq.read().split("\n")
+        cache["last"] = alist.pop(-1)
+        print( cache["last"])
+        cache["order"] = alist
+        print(cache)
+        return cache
         
     def create_new_file_page(self):
         #fired on save click of filenamepopup

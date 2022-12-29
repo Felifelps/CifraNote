@@ -10,9 +10,9 @@ if "win" in sys.platform:
     from kivy.metrics import dp
     Window.size = (dp(400), dp(700))
     
-class CifraNoteApp(App):
+class CifraNoteApp(App): 
     def build(self): return MainPage()
-    
+
 if __name__ == "__main__": CifraNoteApp().run()
 
     
