@@ -11,49 +11,58 @@ class Control:
     
     def load_files(self):
         cache = self.load_files_cache()
-        for file in cache["order"]: self.filearea.add_page(file, self.fm.load(file), False)
-        if cache["order"] == []: cache["last"] = self.filearea.add_page("Nota Geral", "", False)
-        self.filearea.load_slide(cache["last"])
+        print(cache)
+        for file in self.fm.files: self.filearea.add_page(file, self.fm.load(file), False)
+        if self.fm.files == []: cache = self.filearea.add_page("Nota Geral", "", False)
+        self.filearea.load_slide(cache)
     
-    def save_files_cache(self): 
-        string = ""
-        for slide in self.filearea.slides: string += slide.title + "\n"
-        string += self.filearea.current_slide.title
-        with open("cache", "w") as arq: arq.write(string) 
+    def save_files_cache(self):
+        with open("cache", "w") as arq: arq.write(self.filearea.current_slide.title) 
     
     def load_files_cache(self):
-        cache = {"order": None, "last": None}
-        with open("cache", "r") as arq: alist = arq.read().split("\n")
-        cache["last"] = alist.pop(-1)
-        print( cache["last"])
-        cache["order"] = alist
-        print(cache)
-        return cache
+        with open("cache", "r") as arq: return arq.read()
+
+    def create_list_files(self):
+        for i in self.filearea.slides: self.ofp.content.add_button(i.title, (True if i == self.filearea.current_slide else False))
         
     def create_new_file_page(self):
         #fired on save click of filenamepopup
         self.fnp.content.save.disabled = True
         if self.fnp.content.textinput.text == "": 
             self.fnp.content.save.disabled = False
-            self.mainpage.fastpopup.text = "Nome vazio"
-            self.mainpage.fastpopup.open()
+            self.fp.open("Nome vazio")
         elif self.fnp.content.textinput.text.lower() in self.fm.files: 
             self.fnp.content.save.disabled = False
-            self.mainpage.fastpopup.text = "Já existe"
+            self.fp.open("Já existe")
         else:
-            self.filearea.add_page(self.fnp.content.textinput.text)
+            self.filearea.add_page(self.fnp.content.textinput.text, "")
             self.fm.save(self.fnp.content.textinput.text, "")
             self.fnp.dismiss()
-            self.mainpage.fastpopup.text = "Arquivo criado"
-        self.mainpage.fastpopup.open()
+            self.fp.open("Arquivo criado")
+    
+    def rename_file(self):
+        #fired on rename click of renamefilepopup
+        self.rfp.content.rename.disabled = True
+        if self.rfp.content.textinput.text == "": 
+            self.rfp.content.rename.disabled = False
+            self.fp.open("Nome vazio")
+        elif self.rfp.content.textinput.text.lower() in self.fm.files: 
+            self.rfp.content.rename.disabled = False
+            self.fp.open("Já existe")
+        else:
+            self.fm.delete(self.filearea.current_slide.title)
+            self.fm.save(self.rfp.content.textinput.text, "")
+            self.filearea.current_slide.title = self.rfp.content.textinput.text
+            self.rfp.dismiss()
+            self.fp.open("Arquivo renomeado")
         
     def delete_file_page(self):
         #fired on delete click on deletefilepopup
         self.dfp.content.delete.disabled = True
-        self.mainpage.fastpopup.text = "Arquivo deletado"
-        self.mainpage.fastpopup.open()
+        if len(self.fm.files) == 1: return [self.dfp.dismiss(), self.fp.open("Deve haver no mínimo um arquivo")]
         self.fm.delete(self.filearea.current_slide.title)
         self.filearea.remove_widget(self.filearea.current_slide)
+        self.fp.open("Arquivo deletado")
         self.dfp.dismiss()
 
 CONTROL = Control()

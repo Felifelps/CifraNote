@@ -9,8 +9,8 @@ class MainPage(RelativeLayout):
         super(MainPage, self).__init__(**kwargs)
         self.control = CONTROL.save_instance(self, "mainpage")
         self.control.load_files()
+        OpenFilePopup()
         FileNamePopup()
         DeleteFilePopup()
-        self.fastpopup = FastPopup(self)
-        self.add_widget(self.fastpopup)
-        
+        RenameFilePopup()
+        self.add_widget(FastPopup())

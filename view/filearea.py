@@ -11,8 +11,7 @@ class FileArea(Carousel):
         self.load_slide(self.slides[0])
         return super().on_slides(*args)
 
-    def on_current_slide(self, instance, value):
-        self.control.save_files_cache()
+    def on_current_slide(self, instance, value): self.control.save_files_cache()
     
     def load_slide(self, slide):
         if isinstance(slide, str):

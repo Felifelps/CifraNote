@@ -33,7 +33,10 @@ class OptionsButton(Button):
     def on_select(self, value):
         self.dropdown.select(value)
         self.is_open = False
-        if value == "Excluir nota": self.control.dfp.open()
+        if value == "Abrir nota": self.control.ofp.open()
+        elif value == "Renomear nota": self.control.rfp.open()
+        elif value == "Excluir nota": self.control.dfp.open()
+        else: pass
     
     def on_is_open(self, instance, value):
         if self.is_open:

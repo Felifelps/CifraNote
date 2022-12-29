@@ -1,5 +1,53 @@
 #:kivy 1.9.0
 
+<FileButton>:
+    line_color: .6, .6, .9, 1
+    canvas.after:
+        Color:
+            rgba: self.line_color
+        Line:
+            points: self.x, self.y, self.x + self.width, self.y
+            width: dp(1)    
+    background_color: 0, 0, 0, 0
+    font_size: "20sp"
+    size_hint: 1, None
+    height: dp(50)
+
+<OpenFilePopup>:
+    size_hint: .8,.6
+    pos_hint: {"center_x": .5, "center_y": .5}
+    background_color: 0, 0, 0, 0
+    title_color: 0, 0, 0, 0
+    separator_color: 0, 0, 0, 0
+
+<OpenFilePopupContent>:
+    scroll: _scroll
+    stack: _stack
+    kivy_file_done: True
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        RoundedRectangle:
+            pos: 0, 0
+            size: self.width, self.height
+            radius: [30]
+    
+    Label:
+        text: "Abrir nota: "
+        font_size: "20sp"
+        size_hint: None, .2
+        width: self.width
+        pos_hint: {"x": .1, "y": .8}
+    
+    ScrollView:
+        id: _scroll
+        size_hint: .8, .7
+        pos_hint: {"center_x": .5, "top": .8}
+        StackLayout:
+            id: _stack
+            size_hint: 1, None
+            
+
 <FileNamePopup>:
     size_hint: .8, .3
     pos_hint: {"center_x": .5, "center_y": .5}
@@ -57,6 +105,66 @@
         font_size: "20sp"
         size_hint: .4, .33
         pos_hint: {"right": .6, "y": 0}
+    
+<RenameFilePopup>:
+    size_hint: .8, .3
+    pos_hint: {"center_x": .5, "center_y": .5}
+    background_color: 0, 0, 0, 0
+    title_color: 0, 0, 0, 0
+    separator_color: 0, 0, 0, 0
+
+<RenameFilePopupContent>:
+    question: _question
+    rename: _rename
+    cancel: _cancel
+    textinput: _textinput
+    kivy_file_done: True
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        RoundedRectangle:
+            pos: 0, 0
+            size: self.width, self.height
+            radius: [30]
+    Label:
+        id: _question
+        text: ""
+        font_size: "20sp"
+        size_hint: None, .33
+        width: self.width
+        pos_hint: {"x": .2, "y": .65}
+
+    TextInput:
+        id: _textinput
+        background_color: 0, 0, 0, 0
+        canvas.after:
+            Color:
+                rgba: .6, .6, .9, 1
+            Line:
+                points: self.x, self.y, self.x + self.width, self.y
+                width: dp(1)
+        multiline: False
+        foreground_color: 1, 1, .8, 1
+        hint_text: "Digite aqui"
+        font_size: "20sp"
+        size_hint: .9, .25
+        pos_hint: {"center_x": .5, "y": .38}
+    
+    Button:
+        id: _rename
+        background_color: 0, 0, 0, 0
+        text: "Renomear"
+        font_size: "20sp"
+        size_hint: .4, .33
+        pos_hint: {"right": 1, "y": 0}
+    
+    Button:
+        id: _cancel
+        background_color: 0, 0, 0, 0
+        text: "Cancelar"
+        font_size: "20sp"
+        size_hint: .4, .33
+        pos_hint: {"right": .6, "y": 0}
 
 <DeleteFilePopup>:
     size_hint: .8, .2
@@ -100,15 +208,17 @@
         font_size: "20sp"
         size_hint: .4, .33
         pos_hint: {"x": .05, "y": .05}
-    
+
 <FastPopup>:
-    size_hint: .5, .08
-    pos_hint: {"center_x": .5, "center_y": .08}
+    size_hint: .1, .08
+    pos_hint : {"center_x": .5, "center_y": .08}
     canvas.before:
         Color:
             rgba: .2, .2, .2, 1
         RoundedRectangle:
             pos: self.x, self.y
             size: self.width, self.height
-            radius: [20]
+            radius: [30]
     font_size: "20sp"
+
+
