@@ -1,17 +1,27 @@
 from kivy.uix.carousel import Carousel
 from kivy.uix.relativelayout import RelativeLayout
 from control.control import CONTROL
+from kivy.properties import BooleanProperty
 
 class FileArea(Carousel):
+    loaded = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(FileArea, self).__init__(**kwargs)
         self.control = CONTROL.save_instance(self, "filearea")
-    
-    def on_slides(self, *args):
-        self.load_slide(self.slides[0])
-        return super().on_slides(*args)
 
-    def on_current_slide(self, instance, value): self.control.save_files_cache()
+    def ordenate_slides(self):
+        titles = sorted([i.title for i in self.slides])
+        new_list = []
+        for j in titles:
+            for i in self.slides:
+                if i.title == j: 
+                    new_list.append(i)
+                    break
+        self.clear_widgets()
+        for i in new_list: self.add_widget(i)
+            
+    def on_current_slide(self, instance, value): 
+        if self.loaded: self.control.save_files_cache()
     
     def load_slide(self, slide):
         if isinstance(slide, str):

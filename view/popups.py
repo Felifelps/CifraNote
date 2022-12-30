@@ -3,6 +3,7 @@ from kivy.lang import Builder
 from kivy.uix.button import Button, Label
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.stacklayout import StackLayout
 from kivy.animation import Animation
 from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 from kivy.clock import Clock
@@ -19,7 +20,7 @@ class OpenFilePopup(Popup):
         self.content = OpenFilePopupContent(self)
     
     def open(self, *_args, **kwargs):
-        self.content.stack.clear_widgets()
+        self.content.clear_buttons()
         self.control.create_list_files()
         self.content.scroll.scroll_y = 1
         return super().open(*_args, **kwargs)
@@ -35,6 +36,8 @@ class OpenFilePopupContent(RelativeLayout):
         if selected: b.line_color = (1, .3, .3, 1)
         self.stack.add_widget(b)
         self.stack.height = b.height * len(self.stack.children)
+    
+    def clear_buttons(self): self.stack.clear_widgets()
     
 class FileNamePopup(Popup):
     def __init__(self, **kwargs):

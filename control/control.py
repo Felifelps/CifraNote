@@ -9,12 +9,14 @@ class Control:
         exec(f"self.{iname} = instance")
         return self
     
-    def load_files(self):
-        cache = self.load_files_cache()
-        print(cache)
+    def load_files(self, load=""):
+        if load == "": load = self.load_files_cache()
+        self.filearea.loaded = False
         for file in self.fm.files: self.filearea.add_page(file, self.fm.load(file), False)
-        if self.fm.files == []: cache = self.filearea.add_page("Nota Geral", "", False)
-        self.filearea.load_slide(cache)
+        if self.fm.files == []: load = self.filearea.add_page("Nota Geral", "", False)
+        self.filearea.ordenate_slides()
+        self.filearea.loaded = True
+        self.filearea.load_slide(load)
     
     def save_files_cache(self):
         with open("cache", "w") as arq: arq.write(self.filearea.current_slide.title) 
@@ -35,8 +37,8 @@ class Control:
             self.fnp.content.save.disabled = False
             self.fp.open("Já existe")
         else:
-            self.filearea.add_page(self.fnp.content.textinput.text, "")
             self.fm.save(self.fnp.content.textinput.text, "")
+            self.load_files(self.fnp.content.textinput.text)
             self.fnp.dismiss()
             self.fp.open("Arquivo criado")
     
@@ -52,7 +54,8 @@ class Control:
         else:
             self.fm.delete(self.filearea.current_slide.title)
             self.fm.save(self.rfp.content.textinput.text, "")
-            self.filearea.current_slide.title = self.rfp.content.textinput.text
+            self.filearea.remove_widget(self.filearea.current_slide)
+            self.load_files(self.rfp.content.textinput.text)
             self.rfp.dismiss()
             self.fp.open("Arquivo renomeado")
         
