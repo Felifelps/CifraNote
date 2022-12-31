@@ -12,6 +12,8 @@
 <FilePage>:
     title: ""
     content: ""
+    textinput: _textinput
+    kivy_file_done: True
     canvas:
         Color:
             rgba: .25, .25, .25, 1
@@ -31,6 +33,7 @@
         font_size: "16sp"
 
     TextInput:
+        id: _textinput
         multiline: True
         text: root.content
         size_hint: .98, .94

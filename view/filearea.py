@@ -1,5 +1,6 @@
 from kivy.uix.carousel import Carousel
 from kivy.uix.relativelayout import RelativeLayout
+from kivy.uix.textinput import TextInput
 from control.control import CONTROL
 from kivy.properties import BooleanProperty
 
@@ -39,4 +40,24 @@ class FileArea(Carousel):
         return slide
         
 class FilePage(RelativeLayout):
-    pass
+    kivy_file_done = BooleanProperty(False)
+    def __init__(self, **kwargs):
+        super(FilePage, self).__init__(**kwargs)
+        self.control = CONTROL
+    
+    def on_content(self, instance, value):
+        print("content")
+        self.control.fm.save(self.title, self.content)
+    
+    def save_content(self): 
+        print("save")
+        self.content = self.textinput 
+    
+    def on_kivy_file_done(self, instance, value):
+        if self.kivy_file_done: 
+            print("bind")
+            self.textinput.bind(on_text=lambda a, b: self.save_content())
+    
+class MyTextInput(TextInput):
+    def on_text(self, instance, value):
+        

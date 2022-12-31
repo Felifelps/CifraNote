@@ -9,7 +9,7 @@ class FileManager:
             pass
         self.update()
         
-    def update(self): self.files = list(map(lambda x: x.lower(), os.listdir(self.main_path)))
+    def update(self): self.files = os.listdir(self.main_path)
 
     def save(self, title, lyric):
         with open(os.path.join(self.main_path, f"{title}"), "w") as arq: arq.write(lyric)

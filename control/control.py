@@ -12,9 +12,9 @@ class Control:
     def load_files(self, load=""):
         if load == "": load = self.load_files_cache()
         self.filearea.loaded = False
+        self.filearea.clear_widgets()
         for file in self.fm.files: self.filearea.add_page(file, self.fm.load(file), False)
         if self.fm.files == []: load = self.filearea.add_page("Nota Geral", "", False)
-        self.filearea.ordenate_slides()
         self.filearea.loaded = True
         self.filearea.load_slide(load)
     
@@ -23,6 +23,8 @@ class Control:
     
     def load_files_cache(self):
         with open("cache", "r") as arq: return arq.read()
+    
+    def save_file(self): self.fm.save(self.filearea.current_slide.title, self.filearea.current_slide.content)
 
     def create_list_files(self):
         for i in self.filearea.slides: self.ofp.content.add_button(i.title, (True if i == self.filearea.current_slide else False))
@@ -33,7 +35,7 @@ class Control:
         if self.fnp.content.textinput.text == "": 
             self.fnp.content.save.disabled = False
             self.fp.open("Nome vazio")
-        elif self.fnp.content.textinput.text.lower() in self.fm.files: 
+        elif self.fnp.content.textinput.text.lower() in list(map(lambda x: x.lower(), self.fm.files)): 
             self.fnp.content.save.disabled = False
             self.fp.open("Já existe")
         else:
@@ -48,13 +50,12 @@ class Control:
         if self.rfp.content.textinput.text == "": 
             self.rfp.content.rename.disabled = False
             self.fp.open("Nome vazio")
-        elif self.rfp.content.textinput.text.lower() in self.fm.files: 
+        elif self.rfp.content.textinput.text.lower() in list(map(lambda x: x.lower(), self.fm.files)): 
             self.rfp.content.rename.disabled = False
             self.fp.open("Já existe")
         else:
             self.fm.delete(self.filearea.current_slide.title)
-            self.fm.save(self.rfp.content.textinput.text, "")
-            self.filearea.remove_widget(self.filearea.current_slide)
+            self.fm.save(self.rfp.content.textinput.text, self.filearea.current_slide.content)
             self.load_files(self.rfp.content.textinput.text)
             self.rfp.dismiss()
             self.fp.open("Arquivo renomeado")
