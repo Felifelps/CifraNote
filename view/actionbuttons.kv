@@ -29,7 +29,7 @@
             size: dp(6), dp(6)
             pos: self.x + self.width/2 - dp(3), self.y + self.height*0.25 - dp(3)
 
-<CreateFileButton>:
+<CreateFileButton@Button>:
     control: CONTROL.save_instance(self, "createfilebutton")
     canvas:
         Clear
@@ -41,6 +41,7 @@
         Line:
             points: self.x + self.width*0.25, self.y + self.height/2, self.x + self.width*0.75, self.y + self.height/2
             width: dp(2)
+    on_press: self.control.fnp.open()
 
 <UndoButton@Button>:
     control: CONTROL.save_instance(self, "undobutton")
@@ -53,6 +54,7 @@
             width: dp(2)
         Triangle:
             points: self.x + self.width*0.1, self.y + self.height*0.6, self.x  + self.width*0.1, self.y + self.height*0.3, self.x + self.width*0.4, self.y + self.height*0.3
+    on_press: self.control.undo_change()
 
 <RedoButton@Button>:
     control: CONTROL.save_instance(self, "redobutton")
@@ -65,6 +67,7 @@
             width: dp(2)
         Triangle:
             points: self.x + self.width*0.9, self.y + self.height*0.6, self.x + self.width*0.9, self.y + self.height*0.3, self.x + self.width*0.6, self.y + self.height*0.3
+    on_press: self.control.redo_change()
 
 <FlatButton@Button>:
     control: CONTROL.save_instance(self, "flatbutton")
@@ -72,6 +75,7 @@
     text: "[b][i]b[/i][/b]"
     markup: True
     font_size: "25sp"
+    on_press: self.control.flat_file_text()
 
 <SharpButton@Button>:
     control: CONTROL.save_instance(self, "sharpbutton")
@@ -79,3 +83,4 @@
     text: "[b][i]#[/i][/b]"
     markup: True
     font_size: "25sp"
+    on_press: self.control.sharp_file_text()

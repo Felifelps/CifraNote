@@ -13,7 +13,7 @@
     title: ""
     content: ""
     textinput: _textinput
-    kivy_file_done: True
+    #kivy_file_done: True
     canvas:
         Color:
             rgba: .25, .25, .25, 1
@@ -32,13 +32,16 @@
         pos_hint: {"center_x": .5, "top": 1}
         font_size: "16sp"
 
-    TextInput:
+    FilePageTextInput:
+        root: root
         id: _textinput
-        multiline: True
         text: root.content
-        size_hint: .98, .94
-        pos_hint: {"center_x": .5, "y": 0}
-        font_size: "16sp"
-        background_color: 0, 0, 0, 0
-        foreground_color: 1, 1, 1, 1
-        hint_text: "Digite a cifra aqui"
+        
+<FilePageTextInput>:
+    multiline: True
+    size_hint: .98, .94
+    pos_hint: {"center_x": .5, "y": 0}
+    font_size: "16sp"
+    background_color: 0, 0, 0, 0
+    foreground_color: 1, 1, 1, 1
+    hint_text: "Digite a cifra aqui"

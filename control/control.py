@@ -9,6 +9,20 @@ class Control:
         exec(f"self.{iname} = instance")
         return self
     
+    def flat_file_text(self): self.filearea.current_slide.textinput.text = self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, -1)
+    
+    def sharp_file_text(self): self.filearea.current_slide.textinput.text = self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, 1)
+    
+    def undo_change(self): 
+        text = self.filearea.current_slide.textinput.text
+        self.filearea.current_slide.textinput.do_undo()
+        if self.filearea.current_slide.textinput.text == text: self.fp.open("Alterações irreversíveis")
+
+    def redo_change(self): 
+        text = self.filearea.current_slide.textinput.text
+        self.filearea.current_slide.textinput.do_redo()
+        if self.filearea.current_slide.textinput.text == text: self.fp.open("Alterações irreproduzíveis")
+        
     def load_files(self, load=""):
         if load == "": load = self.load_files_cache()
         self.filearea.loaded = False

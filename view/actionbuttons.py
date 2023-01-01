@@ -3,11 +3,6 @@ from kivy.uix.dropdown import DropDown
 from kivy.properties import BooleanProperty, ListProperty
 from kivy.metrics import dp
 
-class CreateFileButton(Button):
-    def on_press(self):
-        self.control.fnp.open()
-        return super().on_press()
-
 class OptionButton(Button):
     pass
     
@@ -18,7 +13,7 @@ class OptionsButton(Button):
         super(OptionsButton, self).__init__(**kwargs)
         self.dropdown = DropDown()
         self.dropdown.on_dismiss = lambda: self.false_is_open() 
-        self.values = ["Abrir nota", "Renomear nota", "Excluir nota", "Configurações"]
+        self.values = ["Abrir nota", "Renomear nota", "Excluir nota"]
     
     def false_is_open(self): self.is_open = False 
     
@@ -36,7 +31,6 @@ class OptionsButton(Button):
         if value == "Abrir nota": self.control.ofp.open()
         elif value == "Renomear nota": self.control.rfp.open()
         elif value == "Excluir nota": self.control.dfp.open()
-        else: pass
     
     def on_is_open(self, instance, value):
         if self.is_open:
