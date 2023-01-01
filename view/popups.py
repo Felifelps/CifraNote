@@ -8,8 +8,6 @@ from kivy.animation import Animation
 from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 from kivy.clock import Clock
 
-Builder.load_file("view\\popups.kv")
-
 class FileButton(Button):
     pass
     

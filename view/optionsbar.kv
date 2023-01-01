@@ -1,9 +1,7 @@
 #:kivy 1.9.0
-#:include view\actionbuttons.kv
-#:import optionsbar view.optionsbar
 #:import CONTROL control.control.CONTROL
 
-<OptionsBar>:
+<OptionsBar@RelativeLayout>:
     control: CONTROL.save_instance(self, "optionsbar")
     canvas:
         Color:
