@@ -3,12 +3,15 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.textinput import TextInput
 from control.control import CONTROL
 from kivy.properties import BooleanProperty, StringProperty, ObjectProperty
+from kivy.metrics import dp
 
 class FileArea(Carousel):
     loaded = BooleanProperty(False)
     def __init__(self, **kwargs):
         super(FileArea, self).__init__(**kwargs)
         self.control = CONTROL.save_instance(self, "filearea")
+        self.scroll_distance = dp(75)
+        self.scroll_timeout = 200
             
     def on_current_slide(self, instance, value): 
         if self.loaded: self.control.save_files_cache()

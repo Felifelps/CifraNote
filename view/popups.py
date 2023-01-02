@@ -67,7 +67,7 @@ class RenameFilePopup(Popup):
         self.content.textinput.text = ""
         self.content.rename.disabled = False
         self.content.question.text = f"Renomear '{self.control.filearea.current_slide.title}' para: "
-        self.size_hint_x = len(self.content.question.text) * 0.03
+        self.size_hint_x = max(len(self.content.question.text) * 0.035, self.size_hint_x)
         return super().open(*_args, **kwargs)
 
 class RenameFilePopupContent(RelativeLayout):
@@ -89,7 +89,7 @@ class DeleteFilePopup(Popup):
     
     def open(self, *_args, **kwargs):
         self.content.question.text = f"Quer mesmo apagar '{self.control.filearea.current_slide.title}' ?"
-        self.size_hint_x = len(self.content.question.text) * 0.03
+        self.size_hint_x = len(self.content.question.text) * 0.035
         self.content.delete.disabled = False
         return super().open(*_args, **kwargs)
     
@@ -111,7 +111,7 @@ class FastPopup(Label):
         self.opacity = 0
     
     def open(self, text):
-        self.size_hint_x = len(text) * 0.03
+        self.size_hint_x = len(text) * 0.035
         self.text = text
         Animation(opacity=1, duration=0.25).start(self)
         Clock.schedule_once(self.kill, 2)
