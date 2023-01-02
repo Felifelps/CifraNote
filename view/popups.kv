@@ -1,7 +1,7 @@
 #:kivy 1.9.0
 
 <FileButton>:
-    line_color: .6, .6, .9, 1
+    line_color: 0.6, 0.26, .09, 1
     canvas.after:
         Color:
             rgba: self.line_color
@@ -35,9 +35,8 @@
     Label:
         text: "Abrir nota: "
         font_size: "20sp"
-        size_hint: None, .2
-        width: self.width
-        pos_hint: {"x": .1, "y": .8}
+        size_hint: .1, .2
+        pos_hint: {"center_x": .5, "y": .8}
     
     ScrollView:
         id: _scroll
@@ -70,16 +69,15 @@
     Label:
         text: "Nomeie a nota: "
         font_size: "20sp"
-        size_hint: None, .33
-        width: self.width
-        pos_hint: {"x": .1, "y": .65}
+        size_hint: .1, .33
+        pos_hint: {"center_x": .5, "y": .65}
 
     TextInput:
         id: _textinput
         background_color: 0, 0, 0, 0
         canvas.after:
             Color:
-                rgba: .6, .6, .9, 1
+                rgba: 0.6, 0.26, .09, 1
             Line:
                 points: self.x, self.y, self.x + self.width, self.y
                 width: dp(1)
@@ -138,7 +136,7 @@
         background_color: 0, 0, 0, 0
         canvas.after:
             Color:
-                rgba: .6, .6, .9, 1
+                rgba: 0.6, 0.26, .09, 1
             Line:
                 points: self.x, self.y, self.x + self.width, self.y
                 width: dp(1)

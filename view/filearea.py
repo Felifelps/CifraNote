@@ -3,8 +3,6 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.textinput import TextInput
 from control.control import CONTROL
 from kivy.properties import BooleanProperty, StringProperty, ObjectProperty
-from kivy.graphics import *
-from kivy.metrics import dp
 
 class FileArea(Carousel):
     loaded = BooleanProperty(False)
@@ -43,10 +41,13 @@ class FilePageTextInput(TextInput):
     _bubble = ObjectProperty(None)
     def __init__(self, **kwargs):
         super(FilePageTextInput, self).__init__(**kwargs)
-        self.use_bubble = True
         
     def on_text(self, instance, value): self.root.content = self.text
-
+    
+    def on_cursor(self, instance, value):
+        self.height = max((len(self._lines) + 15) * self.line_height, self.root.root.control.mainpage.height*0.85)
+        return super().on_cursor(instance, value)
+        
     def on__bubble(self, instance, value):
         self._bubble.but_cut.text = "Recortar"
         self._bubble.but_copy.text = "Copiar"
@@ -56,4 +57,6 @@ class FilePageTextInput(TextInput):
         self._bubble.but_copy.font_size = "12sp"
         self._bubble.but_paste.font_size = "12sp"
         self._bubble.but_selectall.font_size = "12sp"
+        
+   
         

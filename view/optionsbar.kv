@@ -5,7 +5,7 @@
     control: CONTROL.save_instance(self, "optionsbar")
     canvas:
         Color:
-            rgba: 0, 0, .6, 1
+            rgba: 0.6, 0.26, .09, 1
         Rectangle:
             pos: 0, 0
             size: self.width, self.height
@@ -13,7 +13,7 @@
             rgba: 0, 0, 0, .7
         Rectangle:
             pos: 0, -20
-            size: self.width, self.height + 20
+            size: self.width, dp(20)
     Label:
         text: "[b]CifraNote[/b]"
         markup: True
@@ -39,8 +39,8 @@
     
     FlatButton:
         size_hint: .06, .9
-        pos_hint: {"right": .59, "center_y": .5}
+        pos_hint: {"right": .58, "center_y": .5}
     
     SharpButton:
         size_hint: .06, .9
-        pos_hint: {"right": .53, "center_y": .5}
+        pos_hint: {"right": .52, "center_y": .5}

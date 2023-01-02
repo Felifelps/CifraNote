@@ -10,10 +10,11 @@
             size: self.width, self.height
 
 <FilePage>:
+    id: _root
     title: ""
     content: ""
     textinput: _textinput
-    #kivy_file_done: True
+    scroll: _scroll
     canvas:
         Color:
             rgba: .25, .25, .25, 1
@@ -32,15 +33,20 @@
         pos_hint: {"center_x": .5, "top": 1}
         font_size: "16sp"
 
-    FilePageTextInput:
-        root: root
-        id: _textinput
-        text: root.content
+    ScrollView:
+        id: _scroll
+        size_hint: .98, .94
+        pos_hint: {"center_x": .5, "y": 0}
+        FilePageTextInput:
+            root: _root
+            scroll: _scroll
+            id: _textinput
+            text: self.root.content
+            size_hint: 1, None
+            
         
 <FilePageTextInput>:
     multiline: True
-    size_hint: .98, .94
-    pos_hint: {"center_x": .5, "y": 0}
     font_size: "16sp"
     background_color: 0, 0, 0, 0
     foreground_color: 1, 1, 1, 1

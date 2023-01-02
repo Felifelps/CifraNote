@@ -1,11 +1,9 @@
 from control.control import CONTROL
-from kivy.lang import Builder
 from kivy.uix.button import Button, Label
 from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
-from kivy.uix.stacklayout import StackLayout
 from kivy.animation import Animation
-from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
+from kivy.properties import BooleanProperty
 from kivy.clock import Clock
 
 class FileButton(Button):
