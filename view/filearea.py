@@ -45,7 +45,9 @@ class FilePageTextInput(TextInput):
     def __init__(self, **kwargs):
         super(FilePageTextInput, self).__init__(**kwargs)
         
-    def on_text(self, instance, value): self.root.content = self.text
+    def on_text(self, instance, value): 
+        self.root.content = self.text
+        print(self._undo)
     
     def on_cursor(self, instance, value):
         self.height = max((len(self._lines) + 15) * self.line_height, self.root.root.control.mainpage.height*0.85)
@@ -55,7 +57,7 @@ class FilePageTextInput(TextInput):
         self._bubble.but_cut.text = "Recortar"
         self._bubble.but_copy.text = "Copiar"
         self._bubble.but_paste.text = "Colar"
-        self._bubble.but_selectall.text = "Selecionar tudo"
+        self._bubble.but_selectall.text = "Selecionar\ntudo"
         self._bubble.but_cut.font_size = "12sp"
         self._bubble.but_copy.font_size = "12sp"
         self._bubble.but_paste.font_size = "12sp"

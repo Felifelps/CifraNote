@@ -111,7 +111,7 @@ class FastPopup(Label):
         self.opacity = 0
     
     def open(self, text):
-        self.size_hint_x = len(text) * 0.035
+        self.size_hint_x = len(text) * 0.03
         self.text = text
         Animation(opacity=1, duration=0.25).start(self)
         Clock.schedule_once(self.kill, 2)

@@ -9,9 +9,17 @@ class Control:
         exec(f"self.{iname} = instance")
         return self
     
-    def flat_file_text(self): self.filearea.current_slide.textinput.text = self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, -1)
-    
-    def sharp_file_text(self): self.filearea.current_slide.textinput.text = self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, 1)
+    def flat_file_text(self): 
+        textinput = self.filearea.current_slide.textinput
+        textinput.select_all()
+        textinput.do_backspace()
+        textinput.insert_text(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, -1))
+          
+    def sharp_file_text(self): 
+        textinput = self.filearea.current_slide.textinput
+        textinput.select_all()
+        textinput.do_backspace()
+        textinput.insert_text(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, 1))
     
     def undo_change(self): 
         text = self.filearea.current_slide.textinput.text
