@@ -18,7 +18,8 @@ class OptionsButton(Button):
     def false_is_open(self): self.is_open = False 
     
     def on_values(self, instance, value):
-        for i in self.values: self.dropdown.add_widget(OptionButton(text=i, font_size="15sp", size_hint=(3, None), height=dp(50), on_press=lambda a: self.on_select(a.text)))
+        for i in self.values: 
+            self.dropdown.add_widget(OptionButton(text=i, font_size="15sp", size_hint=(3, None), height=dp(50), on_press=lambda a: self.on_select(a.text)))
         
     def on_press(self):
         self.is_open = True

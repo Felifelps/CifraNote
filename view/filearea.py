@@ -4,6 +4,7 @@ from kivy.uix.textinput import TextInput
 from control.control import CONTROL
 from kivy.properties import BooleanProperty, StringProperty, ObjectProperty
 from kivy.metrics import dp
+from kivy.clock import Clock
 
 class FileArea(Carousel):
     loaded = BooleanProperty(False)
@@ -34,11 +35,11 @@ class FileArea(Carousel):
 class FilePage(RelativeLayout):
     title = StringProperty("")
     content = StringProperty("")
-    def __init__(self, root, **kwargs):
-        self.root = root
+    def __init__(self, filearea, **kwargs):
+        self.filearea = filearea
         super(FilePage, self).__init__(**kwargs)
     
-    def on_content(self, instance, value): self.root.control.fm.save(self.title, self.content)
+    def on_content(self, instance, value): self.filearea.control.fm.save(self.title, self.content)
     
 class FilePageTextInput(TextInput):
     _bubble = ObjectProperty(None)
@@ -46,11 +47,20 @@ class FilePageTextInput(TextInput):
         super(FilePageTextInput, self).__init__(**kwargs)
         
     def on_text(self, instance, value): 
-        self.root.content = self.text
-        print(self._undo)
+        self.filepage.content = self.text
+    
+    def change_tone(self, lyric):
+        self._undo.append({'undo_command': ('delsel', 0, self.text), 'redo_command': (0, len(self.text))})
+        self.text = ""
+        self.insert_text(lyric)
+    
+    def select_all(self, erase=False):
+        override = super().select_all()
+        if erase: Clock.schedule_once(lambda dt: self.do_backspace(), 1)
+        return override
     
     def on_cursor(self, instance, value):
-        self.height = max((len(self._lines) + 15) * self.line_height, self.root.root.control.mainpage.height*0.85)
+        self.height = max((len(self._lines) + 15) * self.line_height, self.filepage.filearea.control.mainpage.height*0.85)
         return super().on_cursor(instance, value)
         
     def on__bubble(self, instance, value):

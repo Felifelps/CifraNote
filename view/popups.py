@@ -89,7 +89,7 @@ class DeleteFilePopup(Popup):
     
     def open(self, *_args, **kwargs):
         self.content.question.text = f"Quer mesmo apagar '{self.control.filearea.current_slide.title}' ?"
-        self.size_hint_x = len(self.content.question.text) * 0.035
+        self.size_hint_x = len(self.content.question.text) * 0.03
         self.content.delete.disabled = False
         return super().open(*_args, **kwargs)
     

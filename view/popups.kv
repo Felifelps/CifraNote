@@ -46,7 +46,6 @@
             id: _stack
             size_hint: 1, None
             
-
 <FileNamePopup>:
     size_hint: .8, .3
     pos_hint: {"center_x": .5, "center_y": .5}
@@ -94,7 +93,7 @@
         text: "Salvar"
         font_size: "20sp"
         size_hint: .4, .33
-        pos_hint: {"right": 1, "y": 0}
+        pos_hint: {"right": .95, "y": 0}
     
     Button:
         id: _cancel
@@ -102,7 +101,7 @@
         text: "Cancelar"
         font_size: "20sp"
         size_hint: .4, .33
-        pos_hint: {"right": .6, "y": 0}
+        pos_hint: {"x": .05, "y": 0}
     
 <RenameFilePopup>:
     size_hint: .8, .3
@@ -153,7 +152,7 @@
         text: "Renomear"
         font_size: "20sp"
         size_hint: .4, .33
-        pos_hint: {"right": 1, "y": 0}
+        pos_hint: {"right": .95, "y": 0}
     
     Button:
         id: _cancel
@@ -161,7 +160,7 @@
         text: "Cancelar"
         font_size: "20sp"
         size_hint: .4, .33
-        pos_hint: {"right": .6, "y": 0}
+        pos_hint: {"x": .05, "y": 0}
 
 <DeleteFilePopup>:
     size_hint: .8, .2

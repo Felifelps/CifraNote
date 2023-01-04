@@ -10,7 +10,7 @@
             size: self.width, self.height
 
 <FilePage>:
-    id: _root
+    id: _filepage
     title: ""
     content: ""
     textinput: _textinput
@@ -40,13 +40,12 @@
         scroll_distance: 1
         scroll_timeout: 1
         FilePageTextInput:
-            root: _root
+            filepage: _filepage
             scroll: _scroll
             id: _textinput
-            text: self.root.content
+            text: self.filepage.content
             size_hint: 1, None
             
-        
 <FilePageTextInput>:
     multiline: True
     font_size: "16sp"

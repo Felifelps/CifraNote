@@ -11,20 +11,16 @@ class Control:
     
     def flat_file_text(self): 
         textinput = self.filearea.current_slide.textinput
-        textinput.select_all()
-        textinput.do_backspace()
-        textinput.insert_text(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, -1))
+        textinput.change_tone(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, -1))
           
     def sharp_file_text(self): 
         textinput = self.filearea.current_slide.textinput
-        textinput.select_all()
-        textinput.do_backspace()
-        textinput.insert_text(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, 1))
+        textinput.change_tone(self.tn.semitone_lyric(self.filearea.current_slide.textinput.text, 1))
     
     def undo_change(self): 
         text = self.filearea.current_slide.textinput.text
         self.filearea.current_slide.textinput.do_undo()
-        if self.filearea.current_slide.textinput.text == text: self.fp.open("Alterações irreversíveis")
+        if self.filearea.current_slide.textinput._undo == []: self.fp.open("Alterações irreversíveis")
 
     def redo_change(self): 
         text = self.filearea.current_slide.textinput.text
@@ -36,7 +32,7 @@ class Control:
         self.filearea.loaded = False
         self.filearea.clear_widgets()
         for file in self.fm.files: self.filearea.add_page(file, self.fm.load(file), False)
-        if self.fm.files == []: load = self.filearea.add_page("Nota Geral", "", False)
+        if load not in self.fm.files: load = self.fm.files[0]
         self.filearea.loaded = True
         self.filearea.load_slide(load)
     
