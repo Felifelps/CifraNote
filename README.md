@@ -1,5 +1,5 @@
 # :guitar: CifraNote
 ![Developing](https://img.shields.io/badge/Status-Developing-orange)
-A note app for guitar players.
+<p>A note app for guitar players.</p>
 
 
