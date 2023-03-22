@@ -9,9 +9,9 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty
 
-from kivy.core.window import Window
-from kivy.metrics import dp
-Window.size = (dp(400), dp(700))
+#from kivy.core.window import Window
+#from kivy.metrics import dp
+#Window.size = (dp(400), dp(700))
 
 from model.tonechanger import TONECHANGER
 from model.filemanager import FILEMANAGER
