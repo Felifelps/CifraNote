@@ -44,6 +44,7 @@ kv = '''
         MDTextFieldRect:
             id: textfield
             hint_text: "Digite aqui"
+            font_size: app.font_size
             line_anim: False
             size_hint: 1, None
             multiline: True
@@ -53,7 +54,14 @@ kv = '''
             background_color: 0, 0, 0, 0
             foreground_color: 1, 1, 1, 1
             on_text: app.save_changes(_self.title, self.text)
-            
+
+<NoNotesLabel@MDLabel>:
+    text: "Sem notas no momento"
+    font_size: "20sp"
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 0
+    halign: "center"
+                
 MDScreen:
     MDBoxLayout:
         orientation: "vertical"
@@ -63,6 +71,8 @@ MDScreen:
             title: "CifraNote"
             right_action_items: 
                 [
+                ["format-font-size-decrease", lambda button: app.actionbarbutton(button)],
+                ["format-font-size-increase", lambda button: app.actionbarbutton(button)],
                 ["music-accidental-flat", lambda button: app.actionbarbutton(button)], 
                 ["music-accidental-sharp", lambda button: app.actionbarbutton(button)], 
                 ["undo", lambda button: app.actionbarbutton(button)], 
@@ -72,6 +82,7 @@ MDScreen:
         
         MDRelativeLayout:
             size_hint: 1, .9
+            
             MDTabs:
                 id: tabs
                 text_color_normal: 1, 1, 1, 1
@@ -83,7 +94,7 @@ MDScreen:
                 id: floating
                 icon: "pencil"
                 root_button_anim: True
-                data: {"Nova nota": ["plus", "on_press", lambda x: self.close_stack() == app.naming_dialog.open()], "Renomear nota": ["rename-box", "on_press", lambda x: self.close_stack() == app.renaming_dialog.open()], "Excluir nota": ["delete", "on_press", lambda x: self.close_stack() == app.deleting_dialog.open()]}
+                data: {"Nova nota": ["plus", "on_press", lambda x: self.close_stack() == app.naming_dialog.open()], "Renomear nota atual": ["rename-box", "on_press", lambda x: self.close_stack() == app.renaming_dialog.open()], "Excluir nota atual": ["delete", "on_press", lambda x: self.close_stack() == app.deleting_dialog.open()]}
 '''
 
 class NamingDialogContent(MDBoxLayout):
@@ -97,6 +108,8 @@ class Tab(MDRelativeLayout, MDTabsBase):
 
 class CifraNoteApp(MDApp):
     notes = ["Nota Geral"]
+    print(FILEMANAGER.get_conf("font_size"))
+    font_size = StringProperty(FILEMANAGER.get_conf("font_size"))
     def build(self):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Brown"
@@ -106,10 +119,6 @@ class CifraNoteApp(MDApp):
         if hasattr(self, "tabs"): FILEMANAGER.save(title, text)
     
     def actionbarbutton(self, button):
-        '''
-        if "plus" in button.icon:
-            self.naming_dialog.open()
-        el'''
         if "dots" in button.icon:
             self.menu.caller = button
             self.menu.open()
@@ -119,15 +128,23 @@ class CifraNoteApp(MDApp):
             self.tabs.get_current_tab().ids.textfield.do_undo()
         elif "redo" in button.icon:
             self.tabs.get_current_tab().ids.textfield.do_redo()
+        elif "crease" in button.icon:
+            number = self.font_size.replace("sp", "")
+            if "in" in button.icon and int(number) <= 75:
+                self.font_size = self.font_size.replace(number, str(int(number) + 1))
+            elif "de" in button.icon and int(number) >= 10:
+                self.font_size = self.font_size.replace(number, str(int(number) - 1))
+            FILEMANAGER.save_conf("font_size", self.font_size)
+    
+    def on_font_size(self, instance, value):
+        Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
         
     def __create_tabs(self):
-        base = [self.tabs.children[0], self.tabs.children[1]]
-        for i in self.tabs.children:
-            if i not in base:
-                self.tabs.remove_widget(i)
-        print(self.tabs.children)
+        for tab in self.tabs.get_tab_list():
+            self.tabs.remove_widget(tab)
         for i in FILEMANAGER.files:
             tab = Tab(title=i)
+            print(tab.ids.textfield.font_size)
             tab.ids.textfield.text = FILEMANAGER.load(i)
             self.tabs.add_widget(tab)
     
@@ -151,7 +168,7 @@ class CifraNoteApp(MDApp):
             ]
         )
         self.renaming_dialog = MDDialog(
-            title="Renomear nota",
+            title="Renomear nota atual para:",
             type="custom",
             content_cls=RenamingDialogContent(),
             buttons=[
@@ -166,7 +183,7 @@ class CifraNoteApp(MDApp):
             ]
         )
         self.deleting_dialog = MDDialog(
-            title="Excluir nota",
+            title="Excluir nota atual?",
             buttons=[
                 MDFlatButton(
                     text="Sair",
@@ -207,6 +224,7 @@ class CifraNoteApp(MDApp):
     def rename_note(self, title):
         if title == "": Snackbar(text="Nome vazio!").open()
         elif title in FILEMANAGER.files: Snackbar(text="Nota já existente!").open()
+        elif FILEMANAGER.files == []: Snackbar(text="Não há notas para renomear").open()
         else:
             old_title = self.tabs.get_current_tab().title
             self.tabs.get_current_tab().title = title
@@ -216,9 +234,10 @@ class CifraNoteApp(MDApp):
             self.__create_tabs()
             
     def delete_note(self):
+        if len(FILEMANAGER.files) <= 1: return Snackbar(text="Deve haver pelo menos uma nota!").open()
+        FILEMANAGER.delete(self.tabs.get_current_tab().title)
         self.tabs.remove_widget(self.tabs.get_current_tab())
         Snackbar(text="Nota excluida!").open()
-        FILEMANAGER.delete(self.tabs.get_current_tab().title)
             
     def on_tab_switch(self, *args):
         pass
