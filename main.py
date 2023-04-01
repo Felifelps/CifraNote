@@ -1,3 +1,5 @@
+import webbrowser
+
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
 from kivymd.uix.tab import MDTabsBase, MDTabs
@@ -71,8 +73,6 @@ MDScreen:
             title: "CifraNote"
             right_action_items: 
                 [
-                ["format-font-size-decrease", lambda button: app.actionbarbutton(button)],
-                ["format-font-size-increase", lambda button: app.actionbarbutton(button)],
                 ["music-accidental-flat", lambda button: app.actionbarbutton(button)], 
                 ["music-accidental-sharp", lambda button: app.actionbarbutton(button)], 
                 ["undo", lambda button: app.actionbarbutton(button)], 
@@ -117,6 +117,14 @@ class CifraNoteApp(MDApp):
 
     def save_changes(self, title, text):
         if hasattr(self, "tabs"): FILEMANAGER.save(title, text)
+        
+    def change_font_size(self, increase=True):
+        number = self.font_size.replace("sp", "")
+        if increase and int(number) <= 75:
+            self.font_size = self.font_size.replace(number, str(int(number) + 1))
+        elif not increase and int(number) >= 10:
+            self.font_size = self.font_size.replace(number, str(int(number) - 1))
+        FILEMANAGER.save_conf("font_size", self.font_size)
     
     def actionbarbutton(self, button):
         if "dots" in button.icon:
@@ -128,13 +136,6 @@ class CifraNoteApp(MDApp):
             self.tabs.get_current_tab().ids.textfield.do_undo()
         elif "redo" in button.icon:
             self.tabs.get_current_tab().ids.textfield.do_redo()
-        elif "crease" in button.icon:
-            number = self.font_size.replace("sp", "")
-            if "in" in button.icon and int(number) <= 75:
-                self.font_size = self.font_size.replace(number, str(int(number) + 1))
-            elif "de" in button.icon and int(number) >= 10:
-                self.font_size = self.font_size.replace(number, str(int(number) - 1))
-            FILEMANAGER.save_conf("font_size", self.font_size)
     
     def on_font_size(self, instance, value):
         Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
@@ -198,12 +199,22 @@ class CifraNoteApp(MDApp):
         self.menu = MDDropdownMenu(
             items=[
                 {
+                    "text": "Aumentar fonte",
+                    "viewclass": "OneLineListItem",
+                    "on_release": lambda: self.change_font_size(),
+                },
+                {
+                    "text": "Diminuir fonte",
+                    "viewclass": "OneLineListItem",
+                    "on_release": lambda: self.change_font_size(False),
+                },
+                {
                     "text": "Sobre",
                     "viewclass": "OneLineListItem",
-                    "on_release": lambda: print("cavalo"),
+                    "on_release": lambda: webbrowser.open("https://github.com/Felifelps"),
                 }
             ],
-            width_mult=3
+            width_mult=4
         )
         return super().on_start()
         
