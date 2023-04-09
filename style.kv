@@ -1,0 +1,69 @@
+#:kivy 1.9.0
+#:import colors kivymd.color_definitions
+
+<NamingDialogContent>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: textfield.minimum_height
+    MDTextField:
+        id: textfield
+        hint_text: "Nomeie a nota"
+
+<RenamingDialogContent>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: textfield.minimum_height
+    MDTextField:
+        id: textfield
+        hint_text: "Renomeie a nota"
+        
+<Tab>:
+    id: _self
+    ScrollView:
+        size_hint: 1, 1
+        pos_hint: {"center_x": .5, "top": 1}
+        MDTextFieldRect:
+            id: textfield
+            hint_text: "Digite aqui"
+            font_size: app.font_size
+            line_anim: False
+            size_hint: 1, None
+            multiline: True
+            height: app.root.height * 0.825 if self.minimum_height < app.root.height * 0.825 else self.minimum_height * 1.5
+            padding_x: [dp(10)]
+            padding_y: [dp(10)]
+            background_color: 0, 0, 0, 0
+            foreground_color: 1, 1, 1, 1
+            on_text: app.save_changes(_self.title, self.text)
+                
+MDScreen:
+    MDBoxLayout:
+        orientation: "vertical"
+        
+        MDTopAppBar:
+            size_hint: 1, .1
+            title: "CifraNote"
+            right_action_items: 
+                [
+                ["music-accidental-flat", lambda button: app.actionbarbutton(button)], 
+                ["music-accidental-sharp", lambda button: app.actionbarbutton(button)], 
+                ["undo", lambda button: app.actionbarbutton(button)], 
+                ["redo", lambda button: app.actionbarbutton(button)], 
+                ["dots-vertical", lambda button: app.actionbarbutton(button)],
+                ]
+        
+        MDRelativeLayout:
+            size_hint: 1, .9
+            
+            MDTabs:
+                id: tabs
+                text_color_normal: 1, 1, 1, 1
+                text_color_active: 1, 1, 1, 1
+                on_tab_switch: app.on_tab_switch(*args)
+                tab_indicator_height: dp(4)
+            
+            MDFloatingActionButtonSpeedDial:
+                id: floating
+                icon: "pencil"
+                root_button_anim: True
+                data: {"Nova nota": ["plus", "on_press", lambda x: self.close_stack() == app.naming_dialog.open()], "Renomear nota atual": ["rename-box", "on_press", lambda x: self.close_stack() == app.renaming_dialog.open()], "Excluir nota atual": ["delete", "on_press", lambda x: self.close_stack() == app.deleting_dialog.open()]}

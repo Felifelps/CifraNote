@@ -2,7 +2,6 @@ import os
 
 class FileManager:
     def __init__(self):
-        self.conf = """font_size: 15sp"""
         self.main_path = os.path.abspath("files")
         try:
             os.mkdir(self.main_path)
@@ -10,14 +9,20 @@ class FileManager:
             pass
         self.__conf_setup()
         self.update()
+        
+    def conf(self):
+        with open("conf", "r") as conf_file:
+            return conf_file.read()
     
     def __conf_setup(self):
         try:
-            with open(".conf", "r") as conf_file:
-                self.conf = conf_file.read()
+            self.conf()
         except:
-            with open(".conf", "w") as conf_file:
-                conf_file.write(self.conf)
+            with open("conf", "w") as conf_file:
+                conf_file.write("""font_size: 15sp
+last_opened: Nota Geral
+order: Nota Geral        
+""")
         
     def update(self): self.files = os.listdir(self.main_path)
 
@@ -40,16 +45,15 @@ class FileManager:
         self.save(new_title, old_file) 
     
     def save_conf(self, conf, value):
-        for line in self.conf.split("\n"):
+        text = self.conf()
+        for line in text.split("\n"):
             if conf in line:
-                with open(".conf", "w") as conf_file:
-                    conf_file.write(self.conf.replace(line, conf + ": " + value))
-                    return self.__conf_setup()
+                with open("conf", "w") as conf_file:
+                    return conf_file.write(text.replace(line, conf + ": " + value))
     
     def get_conf(self, conf):
-        for line in self.conf.split("\n"):
+        for line in self.conf().split("\n"):
             if conf in line:
                 return line.replace(conf + ": ", "")
         
 FILEMANAGER = FileManager()
-
