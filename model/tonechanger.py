@@ -150,7 +150,6 @@ class ToneChanger:
             final_chord = self.semitone_chord(chord.split('/')[0], semitones) + "/" + self.semitone_chord(chord.split('/')[1], semitones)
             return final_chord
         note = notes[0]
-        print(chord, note)
         new_note = self.NOTE_POSITION[(self.NOTES_RELATION["C"][note] + semitones)%12 if (self.NOTES_RELATION["C"][note] + semitones)%12 != 0 else 12]
         return chord.replace(note, new_note)
             
@@ -204,49 +203,3 @@ class ToneChanger:
         return "\n".join(new_lyric)
     
 TONECHANGER = ToneChanger()
-c = """
-Tom: Bm
-Bm7
-Não consigo tirar da minha cabeça
-                                 Bm7/A
-Esses olhos que eu nunca vi tão perto
-
-A ponto de bater o cílio no meu
-
-A/G
-Não sai da mente o sorriso entreaberto
-
-Eu penso se eu tô errado ou se tô certo
-
-Em cultivar esse bem querer
-
-Bm7
-O problema é que já tem alguém do seu lado
-                       Bm7/A
-E eu me sinto tão errado por tentar me 
-aproximar
-Remover anúncio
-    A/G
-Por isso eu mantenho a distancia necessária
-
-Pra que não se esqueça minha cara
-
-E que ao meu lado é um bom lugar
- C#m7(b5)                     F#7
-Mais que isso eu não vou fazer não
-
-              Bm7
-Apesar de querer
-
-E como eu quero, e como eu quero
-             Bm7/A
-Apesar de querer
-
-E como eu quero, como eu quero
-             A/G
-Apesar de querer
-
-E como eu quero, como eu quero
-F#7
-AiAi
-"""

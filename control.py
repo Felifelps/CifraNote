@@ -5,10 +5,25 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.tab import MDTabsBase
 from kivymd.uix.relativelayout import MDRelativeLayout
+from kivymd.uix.textfield import MDTextFieldRect
 from kivy.clock import Clock
+from kivy.properties import ObjectProperty
 
 class Tab(MDRelativeLayout, MDTabsBase):
     """The notes"""
+        
+class TabTextField(MDTextFieldRect):
+    """The tab textfield"""
+    _bubble = ObjectProperty(None)
+    def on__bubble(self, value, instance):
+        self._bubble.but_cut.text = "Recortar"
+        self._bubble.but_copy.text = "Copiar"
+        self._bubble.but_paste.text = "Colar"
+        self._bubble.but_selectall.text = "Selecionar\n     tudo"
+        self._bubble.but_cut.font_size = "12sp"
+        self._bubble.but_copy.font_size = "12sp"
+        self._bubble.but_paste.font_size = "12sp"
+        self._bubble.but_selectall.font_size = "12sp"
 
 class NamingDialogContent(MDBoxLayout):
     """Content of naming dialog"""

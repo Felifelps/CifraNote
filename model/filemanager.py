@@ -1,4 +1,19 @@
 import os
+TUTORIAL = """###TUTORIAL###
+Seja bem-vindo ao CifraNote!!
+
+Esse é um app para músicos, então se você se sentir um pouco perdido já sabe para quem perguntar. 
+
+A principal função desse app é facilitar a troca de tom de cifras. Você pode fazer isso apenas colando uma cifra aqui, ou a escrevendo por si só, e usando os botões "b" e "#" acima para diminuir ou aumentar, respectivamente, meio-tom da cifra.
+
+Faça um teste (clique em "b" ou "#" acima):
+C G Am F
+
+Ademais, mantenha as cifras salvas aqui (enquanto mantiver o app instalado) e tenha controle sobre o tamanho do texto (menu no canto superior direito).
+
+Divirta-se!!
+
+"""
 
 class FileManager:
     def __init__(self):
@@ -8,11 +23,10 @@ class FileManager:
         except:
             pass
         self.__conf_setup()
+        if self.get_conf('tutorial') == 'True': 
+            self.save('Tutorial', TUTORIAL)
+            self.save_conf('tutorial', 'False')
         self.update()
-        
-    def conf(self):
-        with open("conf", "r") as conf_file:
-            return conf_file.read()
     
     def __conf_setup(self):
         try:
@@ -20,9 +34,13 @@ class FileManager:
         except:
             with open("conf", "w") as conf_file:
                 conf_file.write("""font_size: 15sp
-last_opened: Nota Geral
-order: Nota Geral        
+last_opened: Tutorial
+order: Tutorial
+tutorial: True      
 """)
+    def conf(self):
+        with open("conf", "r") as conf_file:
+            return conf_file.read()
         
     def update(self): self.files = os.listdir(self.main_path)
 

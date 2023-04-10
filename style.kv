@@ -17,24 +17,29 @@
         id: textfield
         hint_text: "Renomeie a nota"
         
+<TabTextField>:
+    use_bubble: True
+    hint_text: "Digite aqui"
+    font_size: app.font_size
+    line_anim: False
+    size_hint: 1, None
+    multiline: True
+    height: app.root.height * 0.825 if self.minimum_height < app.root.height * 0.825 else self.minimum_height + app.root.height*0.6
+    padding_x: [dp(10)]
+    padding_y: [dp(10)]
+    background_color: 0, 0, 0, 0
+    foreground_color: 1, 1, 1, 1
+
 <Tab>:
     id: _self
     ScrollView:
         size_hint: 1, 1
         pos_hint: {"center_x": .5, "top": 1}
-        MDTextFieldRect:
+        TabTextField:
             id: textfield
-            hint_text: "Digite aqui"
-            font_size: app.font_size
-            line_anim: False
-            size_hint: 1, None
-            multiline: True
-            height: app.root.height * 0.825 if self.minimum_height < app.root.height * 0.825 else self.minimum_height * 1.5
-            padding_x: [dp(10)]
-            padding_y: [dp(10)]
-            background_color: 0, 0, 0, 0
-            foreground_color: 1, 1, 1, 1
             on_text: app.save_changes(_self.title, self.text)
+            
+    
                 
 MDScreen:
     MDBoxLayout:

@@ -54,8 +54,7 @@ class CifraNoteApp(MDApp, Control):
         self.filemanager.save_conf("font_size", self.font_size)
     
     def on_start(self):
-        for i in self.root.ids: 
-            exec(f"self.{i} = self.root.ids[i]")
+        self.tabs = self.root.ids["tabs"]
         self.__create_tabs()
         self.naming_dialog = MDDialog(
             title="Criar nota",
@@ -120,6 +119,7 @@ class CifraNoteApp(MDApp, Control):
             ],
             width_mult=4
         )
+        print(dir(self.tabs.get_current_tab().ids.textfield._bubble))
         return super().on_start()
             
 CifraNoteApp().run()
