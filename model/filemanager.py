@@ -4,15 +4,14 @@ Seja bem-vindo ao CifraNote!!
 
 Esse é um app para músicos, então se você se sentir um pouco perdido já sabe para quem perguntar. 
 
-A principal função desse app é facilitar a troca de tom de cifras. Você pode fazer isso apenas colando uma cifra aqui, ou a escrevendo por si só, e usando os botões "b" e "#" acima para diminuir ou aumentar, respectivamente, meio-tom da cifra.
+A principal função desse app é facilitar a troca de tom de cifras. Você pode fazer isso apenas colando uma cifra aqui, ou a escrevendo por si só, e usando os botões "b" e "#" abaixo para diminuir ou aumentar, respectivamente, meio-tom da cifra.
 
-Faça um teste (clique em "b" ou "#" acima):
+Faça um teste (clique em "b" ou "#" abaixo):
 C G Am F
 
 Ademais, mantenha as cifras salvas aqui (enquanto mantiver o app instalado) e tenha controle sobre o tamanho do texto (menu no canto superior direito).
 
 Divirta-se!!
-
 """
 
 class FileManager:
@@ -42,7 +41,9 @@ tutorial: True
         with open("conf", "r") as conf_file:
             return conf_file.read()
         
-    def update(self): self.files = os.listdir(self.main_path)
+    def update(self): 
+        self.files = os.listdir(self.main_path)
+        return self.files
 
     def save(self, title, lyric):
         with open(os.path.join(self.main_path, f"{title}"), "w") as arq: arq.write(lyric)

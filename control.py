@@ -97,4 +97,5 @@ class Control:
     def save_changes(self, title, text):
         if hasattr(self, "tabs"): self.filemanager.save(title, text)
         
-    
+    def get_files_order(self):
+        return self.filemanager.get_conf('order').split(',')

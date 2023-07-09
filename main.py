@@ -9,12 +9,13 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty
 
-#from kivy.core.window import Window
-#from kivy.metrics import dp
-#Window.size = (dp(400), dp(700))
+from kivy.core.window import Window
+from kivy.metrics import dp
+Window.size = (dp(400), dp(700))
 
 class CifraNoteApp(MDApp, Control):
     font_size = StringProperty(Control.filemanager.get_conf("font_size"))
+    save_when_stop = []
     
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -22,15 +23,21 @@ class CifraNoteApp(MDApp, Control):
         return Builder.load_file('style.kv')
     
     def actionbarbutton(self, button):
-        if "dots" in button.icon:
-            self.menu.caller = button
-            self.menu.open()
+        if "menu" in button.icon:
+            self.root.lm.rv.data = [{'text': i} for i in self.get_files_order()]
+            self.root.lm.open()
         elif "music" in button.icon:
             self.change_tone(1 if "sharp" in button.icon else -1)
         elif "undo" in button.icon:
             self.tabs.get_current_tab().ids.textfield.do_undo()
         elif "redo" in button.icon:
             self.tabs.get_current_tab().ids.textfield.do_redo()
+        elif 'plus' in button.icon:
+            self.naming_dialog.open() 
+        elif 'form' in button.icon:
+            self.renaming_dialog.open()
+        elif 'trash' in button.icon:
+            self.deleting_dialog.open()
     
     def on_font_size(self, instance, value):
         Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
@@ -54,6 +61,7 @@ class CifraNoteApp(MDApp, Control):
         self.filemanager.save_conf("font_size", self.font_size)
     
     def on_start(self):
+        self.link = lambda: webbrowser.open("https://github.com/Felifelps")
         self.tabs = self.root.ids["tabs"]
         self.__create_tabs()
         self.naming_dialog = MDDialog(
@@ -99,27 +107,24 @@ class CifraNoteApp(MDApp, Control):
                 )
             ]
         )
-        self.menu = MDDropdownMenu(
-            items=[
-                {
-                    "text": "Aumentar fonte",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda: self.change_font_size(),
-                },
-                {
-                    "text": "Diminuir fonte",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda: self.change_font_size(False),
-                },
-                {
-                    "text": "Sobre",
-                    "viewclass": "OneLineListItem",
-                    "on_release": lambda: webbrowser.open("https://github.com/Felifelps"),
-                }
-            ],
-            width_mult=4
-        )
-        print(dir(self.tabs.get_current_tab().ids.textfield._bubble))
         return super().on_start()
-            
-CifraNoteApp().run()
+
+    def on_stop(self):
+        for save in self.save_when_stop:
+            self.save_changes(*save)
+        self.save_when_stop = []
+        return super().on_stop()
+
+    def on_pause(self):
+        self.on_stop()
+        return super().on_pause()
+
+    def on_resume(self):
+        self.stopped = Snackbar(text='Carregando dados salvos...')
+        if self.save_when_stop == []: self.stopped.open()
+        return super().on_resume()
+
+try:
+    CifraNoteApp().run()
+except Exception as e:
+    input(e)

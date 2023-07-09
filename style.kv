@@ -1,5 +1,6 @@
 #:kivy 1.9.0
 #:import colors kivymd.color_definitions
+#:import Animation kivy.animation.Animation
 
 <NamingDialogContent>:
     orientation: "vertical"
@@ -37,28 +38,148 @@
         pos_hint: {"center_x": .5, "top": 1}
         TabTextField:
             id: textfield
-            on_text: app.save_changes(_self.title, self.text)
-            
+            on_text: app.save_when_stop.append((_self.title, self.text))
+
+<LateralMenuBase@MDBoxLayout>:
+    id: _lm
+    orientation: 'vertical'
+    size_hint: .8, 1
+    pos_hint: {'x': -2, 'top': 1}
+    bg_opacity: 0
+    open_anim: Animation(pos_hint={'x': 0}, bg_opacity=0.75, duration=0.1)
+    close_anim: Animation(pos_hint={'x': -2}, bg_opacity=0, duration=0.1)
+    open: lambda: self.open_anim.start(self)
+    close: lambda: self.close_anim.start(self)
+    on_touch_down: self.close() if not self.collide_point(*args[1].pos) else 0
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+        Color:
+            rgba: 0, 0, 0, self.bg_opacity
+        Rectangle:
+            pos: 0, 0
+            size: self.width*1.25, self.height
+
+<OptionButton@MDTextButton>:
+    size_hint: 1, .33
+    font_size: '17.5sp'
+    haling: 'center'
+
+<ItemButton@MDRectangleFlatButton>:
+    line_color: 1, 1, 1, 1
+    theme_text_color: "Custom"
+    text_color: 1, 1, 1, 1
+    halign: 'left'
+    text: "Background"            
+    icon: "selection-multiple"
+    size_hint: 1, None
+    height: dp(60)
+    font_size: '20sp'
+    on_press:
+        app.tabs.switch_tab(self.text)
+        app.root.lm.close()
+
+<LateralMenu@LateralMenuBase>:
+    rv: _rv
+    md_bg_color: app.theme_cls.primary_dark
+    radius: [0, 25, 0, 25]
+    MDLabel:
+        text: '[b]Todas as notas[/b]'
+        markup: True
+        font_size: '25sp'
+        size_hint: 1, .075
+        halign: 'center'
+    RecycleView:
+        id: _rv
+        viewclass: 'ItemButton'
+        size_hint: .94, .685
+        pos_hint: {'center_x': .5, 'top': .7}
+        RecycleBoxLayout:
+            orientation: 'vertical'
+            default_size: None, dp(56)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: dp(5)
+            padding: dp(2)
+    MDBoxLayout:  
+        md_bg_color: .2, .2, .2, 1
+        radius: [25, 25, 0, 0]
+        size_hint: 1, .2
+        pos_hint: {'top': .9}
+        padding: dp(10)
+        orientation: 'vertical'
+        OptionButton: 
+            text: 'Aumentar fonte'
+            on_press: app.change_font_size()
+        OptionButton: 
+            text: 'Diminuir fonte'
+            on_press: app.change_font_size(False)
+        OptionButton: 
+            text: 'Sobre'
+            on_press: app.link()
+    MDLabel:
+        md_bg_color: .2, .2, .2, 1
+        text: 'By Felifelps'
+        font_size: '13sp'
+        size_hint: 1, .04
+        halign: 'center'
+
+<Bar@MDBoxLayout>:
+    md_bg_color: app.theme_cls.primary_color
+    padding: dp(10)
+
+<BottomBar@Bar>:
+    radius: [15, 15, 0, 0]
+    MDIconButton:
+        icon: 'undo'
+        size_hint_x: .25 
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: 'redo'
+        size_hint_x: .25 
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: "music-accidental-flat"
+        size_hint_x: .25 
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: "music-accidental-sharp"
+        size_hint_x: .25 
+        on_press: app.actionbarbutton(self)
+
+<TopBar@Bar>:
+    md_bg_color: app.theme_cls.primary_color
+    padding: dp(10)
+    MDLabel:
+        text: '[b]CifraNote[/b]'
+        font_size: '27.5sp'
+        markup: True
+    MDIconButton:
+        icon: 'plus'
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: 'form-textbox'
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: 'trash-can-outline'
+        on_press: app.actionbarbutton(self)
+    MDIconButton:
+        icon: 'menu'
+        on_press: app.actionbarbutton(self)
     
                 
 MDScreen:
+    lm: _lm
     MDBoxLayout:
         orientation: "vertical"
-        
-        MDTopAppBar:
+        TopBar:
             size_hint: 1, .1
-            title: "CifraNote"
-            right_action_items: 
-                [
-                ["music-accidental-flat", lambda button: app.actionbarbutton(button)], 
-                ["music-accidental-sharp", lambda button: app.actionbarbutton(button)], 
-                ["undo", lambda button: app.actionbarbutton(button)], 
-                ["redo", lambda button: app.actionbarbutton(button)], 
-                ["dots-vertical", lambda button: app.actionbarbutton(button)],
-                ]
+            pos_hint: {'top': 1}
         
         MDRelativeLayout:
-            size_hint: 1, .9
+            size_hint: 1, .8
             
             MDTabs:
                 id: tabs
@@ -67,8 +188,8 @@ MDScreen:
                 on_tab_switch: app.on_tab_switch(*args)
                 tab_indicator_height: dp(4)
             
-            MDFloatingActionButtonSpeedDial:
-                id: floating
-                icon: "pencil"
-                root_button_anim: True
-                data: {"Nova nota": ["plus", "on_press", lambda x: self.close_stack() == app.naming_dialog.open()], "Renomear nota atual": ["rename-box", "on_press", lambda x: self.close_stack() == app.renaming_dialog.open()], "Excluir nota atual": ["delete", "on_press", lambda x: self.close_stack() == app.deleting_dialog.open()]}
+        BottomBar:
+            size_hint: 1, .1
+            pos_hint: {'y': 0}
+    LateralMenu:
+        id: _lm
