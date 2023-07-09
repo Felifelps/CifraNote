@@ -1,4 +1,4 @@
-import webbrowser
+import webbrowser, platform
 
 from control import Control, Tab, RenamingDialogContent, NamingDialogContent, Clock
 from kivymd.app import MDApp 
@@ -9,9 +9,10 @@ from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty
 
-from kivy.core.window import Window
-from kivy.metrics import dp
-Window.size = (dp(400), dp(700))
+if platform.system() == 'Windows':
+    from kivy.core.window import Window
+    from kivy.metrics import dp
+    Window.size = (dp(400), dp(700))
 
 class CifraNoteApp(MDApp, Control):
     font_size = StringProperty(Control.filemanager.get_conf("font_size"))
