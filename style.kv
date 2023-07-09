@@ -2,11 +2,15 @@
 #:import colors kivymd.color_definitions
 #:import Animation kivy.animation.Animation
 
+<LimitTextInput>:
+    limit: 100
+    font_size: '15sp'
+
 <NamingDialogContent>:
     orientation: "vertical"
     size_hint_y: None
     height: textfield.minimum_height
-    MDTextField:
+    LimitTextInput:
         id: textfield
         hint_text: "Nomeie a nota"
 
@@ -14,7 +18,7 @@
     orientation: "vertical"
     size_hint_y: None
     height: textfield.minimum_height
-    MDTextField:
+    LimitTextInput:
         id: textfield
         hint_text: "Renomeie a nota"
         
@@ -30,6 +34,7 @@
     padding_y: [dp(10)]
     background_color: 0, 0, 0, 0
     foreground_color: 1, 1, 1, 1
+    scroll_distance: dp(5)
 
 <Tab>:
     id: _self
@@ -84,16 +89,32 @@
     rv: _rv
     md_bg_color: app.theme_cls.primary_dark
     radius: [0, 25, 0, 25]
-    MDLabel:
-        text: '[b]Todas as notas[/b]'
-        markup: True
-        font_size: '25sp'
-        size_hint: 1, .075
-        halign: 'center'
+    RelativeLayout:
+        size_hint: .94, .1
+        pos_hint: {"center_x": .5}
+        MDTextField:
+            id: _search_box
+            size_hint: 1, 1
+            color_mode: 'custom'
+            line_color_focus: .8, .8, .8, 1
+            text_color_normal: .8, .8, .8, 1
+            text_color_focus: .8, .8, .8, 1
+            font_size: "18sp"
+            hint_text: "Pesquisar notas"
+            hint_text_color_focus: .8, .8, .8, 0.5
+            hint_text_color_normal: .8, .8, .8, 0.5
+            on_text:
+                strings = list(filter(lambda text: self.text.lower() in text.lower(), app.get_files_order()))
+                _rv.data = [{'text': string} for string in strings]
+        MDIconButton:
+            pos_hint: {'right': 1, 'center_y': .5}
+            icon: "magnify"
+            on_press:
+                _search_box.text += ""
     RecycleView:
         id: _rv
         viewclass: 'ItemButton'
-        size_hint: .94, .685
+        size_hint: .94, .66
         pos_hint: {'center_x': .5, 'top': .7}
         RecycleBoxLayout:
             orientation: 'vertical'
@@ -103,20 +124,20 @@
             height: self.minimum_height
             spacing: dp(5)
             padding: dp(2)
-    MDBoxLayout:  
+    MDBoxLayout:
         md_bg_color: .2, .2, .2, 1
         radius: [25, 25, 0, 0]
         size_hint: 1, .2
         pos_hint: {'top': .9}
         padding: dp(10)
         orientation: 'vertical'
-        OptionButton: 
+        OptionButton:
             text: 'Aumentar fonte'
             on_press: app.change_font_size()
-        OptionButton: 
+        OptionButton:
             text: 'Diminuir fonte'
             on_press: app.change_font_size(False)
-        OptionButton: 
+        OptionButton:
             text: 'Sobre'
             on_press: app.link()
     MDLabel:
@@ -187,6 +208,7 @@ MDScreen:
                 text_color_active: 1, 1, 1, 1
                 on_tab_switch: app.on_tab_switch(*args)
                 tab_indicator_height: dp(4)
+                scroll_distance: dp(30)
             
         BottomBar:
             size_hint: 1, .1

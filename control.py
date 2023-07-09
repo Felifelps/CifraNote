@@ -5,9 +5,20 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.tab import MDTabsBase
 from kivymd.uix.relativelayout import MDRelativeLayout
-from kivymd.uix.textfield import MDTextFieldRect
+from kivymd.uix.textfield import MDTextFieldRect, MDTextField
 from kivy.clock import Clock
 from kivy.properties import ObjectProperty
+
+class LimitTextInput(MDTextField):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.limit_snack = Snackbar(text='Limite de caracteres atingido')
+        
+    def insert_text(self, substring, from_undo=False):
+        if len(self.text + substring) > 26: 
+            self.limit_snack.open()
+            return False
+        return super().insert_text(substring, from_undo)
 
 class Tab(MDRelativeLayout, MDTabsBase):
     """The notes"""
