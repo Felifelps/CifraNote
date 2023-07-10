@@ -22,21 +22,22 @@ class FileManager:
         except:
             pass
         self.__conf_setup()
-        if self.get_conf('tutorial') == 'True': 
+        if 'True' in self.get_conf('tutorial'): 
             self.save('Tutorial', TUTORIAL)
             self.save_conf('tutorial', 'False')
         self.update()
     
     def __conf_setup(self):
         try:
-            self.conf()
+            print(self.conf())
         except:
             with open("conf", "w") as conf_file:
                 conf_file.write("""font_size: 15sp
 last_opened: Tutorial
 order: Tutorial
-tutorial: True      
+tutorial: True
 """)
+                
     def conf(self):
         with open("conf", "r") as conf_file:
             return conf_file.read()

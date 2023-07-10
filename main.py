@@ -55,6 +55,7 @@ class CifraNoteApp(MDApp, Control):
         self.root.notes.selected = title
         self.update_notes()
         self.root.textfield.text = self.file_data[title]
+        self.root.textfield_scroll.scroll_y = 1
         self.filemanager.save_conf("last_opened", title)
             
     def change_font_size(self, increase=True):
@@ -127,7 +128,7 @@ class CifraNoteApp(MDApp, Control):
 
     def on_resume(self):
         self.stopped = Snackbar(text='Carregando dados salvos...')
-        if self.save_when_stop == []: self.stopped.open()
+        self.stopped.open()
         return super().on_resume()
 
 #try:

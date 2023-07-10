@@ -8,7 +8,7 @@
 
 <NamingDialogContent>:
     orientation: "vertical"
-    size_hint_y: None
+    size_hint: 1, None
     height: textfield.minimum_height
     LimitTextInput:
         id: textfield
@@ -16,7 +16,7 @@
 
 <RenamingDialogContent>:
     orientation: "vertical"
-    size_hint_y: None
+    size_hint: 1, None
     height: textfield.minimum_height
     LimitTextInput:
         id: textfield
@@ -217,6 +217,7 @@ MDScreen:
     lm: _lm
     notes: _notes
     textfield: _textfield
+    textfield_scroll: _textfield_scroll
     MDBoxLayout:
         orientation: "vertical"
         TopBar:
@@ -229,6 +230,7 @@ MDScreen:
                 size_hint: 1, .1
                 pos_hint: {'center_x': .5, 'top': 1}
             ScrollView:
+                id: _textfield_scroll
                 size_hint: 1, .9
                 pos_hint: {"center_x": .5, "y": 0}
                 scroll_distance: dp(1)

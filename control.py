@@ -42,27 +42,28 @@ class Control:
         self.menu.dismiss()
         
     def create_new_note(self, title):
+        self.naming_dialog.content_cls.ids.textfield.text = ""
         if title == "": Snackbar(text="Nome vazio!").open()
         elif title in self.filemanager.files: Snackbar(text="Nota já existente!").open()
         else:
-            self.naming_dialog.content_cls.ids.textfield.text = ""
             self.filemanager.save(title, "")
             self.filemanager.save_conf('order', self.filemanager.get_conf('order') + ',' + title)
             self.switch_note(title)
             Snackbar(text="Nota criada!").open()
     
     def rename_note(self, title):
+        self.renaming_dialog.content_cls.ids.textfield.text = ""
         if title == "": Snackbar(text="Nome vazio!").open()
         elif title in self.filemanager.files: Snackbar(text="Nota já existente!").open()
         elif self.filemanager.files == []: Snackbar(text="Não há notas para renomear").open()
         else:
-            self.naming_dialog.content_cls.ids.textfield.text = ""
             new_order = self.filemanager.get_conf('order').split(',')
             index = new_order.index(self.root.notes.selected)
             new_order.pop(index)
             new_order.insert(index, title)
             self.filemanager.save_conf('order', ','.join(new_order))
             self.filemanager.rename(self.root.notes.selected, title)
+            self.file_data[title] = self.file_data.pop(self.root.notes.selected)
             self.switch_note(title)
             Snackbar(text="Nota renomeada!").open()
             
@@ -73,6 +74,7 @@ class Control:
         new_order.pop(index)
         self.filemanager.save_conf('order', ','.join(new_order))
         self.filemanager.delete(self.root.notes.selected)
+        self.file_data.pop(self.root.notes.selected)
         self.switch_note(new_order[index + (1 if index == 0 else -1)])
         Snackbar(text="Nota excluida!").open()
         
