@@ -1,11 +1,10 @@
 import webbrowser, platform
 
-from control import Control, Tab, RenamingDialogContent, NamingDialogContent, Clock
+from control import Control, RenamingDialogContent, NamingDialogContent
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty
 
@@ -17,6 +16,7 @@ if platform.system() == 'Windows':
 class CifraNoteApp(MDApp, Control):
     font_size = StringProperty(Control.filemanager.get_conf("font_size"))
     save_when_stop = []
+    file_data = {}
     
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -25,14 +25,14 @@ class CifraNoteApp(MDApp, Control):
     
     def actionbarbutton(self, button):
         if "menu" in button.icon:
-            self.root.lm.rv.data = [{'text': i} for i in self.get_files_order()]
+            self.root.lm.rv.data = [{'text': i, 'selected': i == self.root.notes.selected} for i in self.get_files_order()]
             self.root.lm.open()
         elif "music" in button.icon:
             self.change_tone(1 if "sharp" in button.icon else -1)
         elif "undo" in button.icon:
-            self.tabs.get_current_tab().ids.textfield.do_undo()
+            self.root.textfield.do_undo()
         elif "redo" in button.icon:
-            self.tabs.get_current_tab().ids.textfield.do_redo()
+            self.root.textfield.do_redo()
         elif 'plus' in button.icon:
             self.naming_dialog.open() 
         elif 'form' in button.icon:
@@ -40,18 +40,22 @@ class CifraNoteApp(MDApp, Control):
         elif 'trash' in button.icon:
             self.deleting_dialog.open()
     
+    def update_notes(self):
+        self.root.notes.data = []
+        for i in self.get_files_order():
+            self.root.notes.data.append({'text': i, 'selected': i == self.root.notes.selected})
+            if i not in self.file_data: self.file_data[i] = self.filemanager.load(i)
+        self.filemanager.save_conf('order', ','.join(self.get_files_order()))
+    
     def on_font_size(self, instance, value):
         Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
-        
-    def __create_tabs(self):
-        last_opened_tab = None
-        last_opened = self.filemanager.get_conf('last_opened')
-        for file in self.filemanager.get_conf('order').split(','):
-            tab = Tab(title=file)
-            tab.ids.textfield.text = self.filemanager.load(file)
-            if file == last_opened: last_opened_tab = tab
-            self.tabs.add_widget(tab)
-        Clock.schedule_once(lambda dt: self.tabs.carousel.load_slide(last_opened_tab), 1)
+    
+    def switch_note(self, title):
+        self.file_data[self.root.notes.selected] = self.root.textfield.text
+        self.root.notes.selected = title
+        self.update_notes()
+        self.root.textfield.text = self.file_data[title]
+        self.filemanager.save_conf("last_opened", title)
             
     def change_font_size(self, increase=True):
         number = self.font_size.replace("sp", "")
@@ -63,8 +67,8 @@ class CifraNoteApp(MDApp, Control):
     
     def on_start(self):
         self.link = lambda: webbrowser.open("https://github.com/Felifelps")
-        self.tabs = self.root.ids["tabs"]
-        self.__create_tabs()
+        self.update_notes()
+        self.switch_note(self.filemanager.get_conf('last_opened'))
         self.naming_dialog = MDDialog(
             title="Criar nota",
             type="custom",
@@ -111,9 +115,10 @@ class CifraNoteApp(MDApp, Control):
         return super().on_start()
 
     def on_stop(self):
-        for save in self.save_when_stop:
-            self.save_changes(*save)
-        self.save_when_stop = []
+        self.file_data[self.root.notes.selected] = self.root.textfield.text
+        for title, data in self.file_data.items():
+            if title in self.get_files_order():
+                self.save_changes(title, data)
         return super().on_stop()
 
     def on_pause(self):
@@ -125,7 +130,7 @@ class CifraNoteApp(MDApp, Control):
         if self.save_when_stop == []: self.stopped.open()
         return super().on_resume()
 
-try:
-    CifraNoteApp().run()
-except Exception as e:
-    input(e)
+#try:
+CifraNoteApp().run()
+#except Exception as e:
+#    input(e)

@@ -3,10 +3,7 @@ from model.filemanager import FILEMANAGER
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.snackbar import Snackbar
-from kivymd.uix.tab import MDTabsBase
-from kivymd.uix.relativelayout import MDRelativeLayout
 from kivymd.uix.textfield import MDTextFieldRect, MDTextField
-from kivy.clock import Clock
 from kivy.properties import ObjectProperty
 
 class LimitTextInput(MDTextField):
@@ -19,9 +16,6 @@ class LimitTextInput(MDTextField):
             self.limit_snack.open()
             return False
         return super().insert_text(substring, from_undo)
-
-class Tab(MDRelativeLayout, MDTabsBase):
-    """The notes"""
         
 class TabTextField(MDTextFieldRect):
     """The tab textfield"""
@@ -51,62 +45,57 @@ class Control:
         if title == "": Snackbar(text="Nome vazio!").open()
         elif title in self.filemanager.files: Snackbar(text="Nota já existente!").open()
         else:
-            self.tabs.add_widget(Tab(title=title))
-            self.tabs.switch_tab(title)
-            Snackbar(text="Nota criada!").open()
             self.naming_dialog.content_cls.ids.textfield.text = ""
             self.filemanager.save(title, "")
-            self.save_tabs_order()
+            self.filemanager.save_conf('order', self.filemanager.get_conf('order') + ',' + title)
+            self.switch_note(title)
+            Snackbar(text="Nota criada!").open()
     
     def rename_note(self, title):
         if title == "": Snackbar(text="Nome vazio!").open()
         elif title in self.filemanager.files: Snackbar(text="Nota já existente!").open()
         elif self.filemanager.files == []: Snackbar(text="Não há notas para renomear").open()
         else:
-            old_title = self.tabs.get_current_tab().title
-            self.tabs.get_current_tab().title = title
-            Snackbar(text="Nota renomeada!").open()
             self.naming_dialog.content_cls.ids.textfield.text = ""
-            self.filemanager.rename(old_title, title)
-            self.save_tabs_order()
+            new_order = self.filemanager.get_conf('order').split(',')
+            index = new_order.index(self.root.notes.selected)
+            new_order.pop(index)
+            new_order.insert(index, title)
+            self.filemanager.save_conf('order', ','.join(new_order))
+            self.filemanager.rename(self.root.notes.selected, title)
+            self.switch_note(title)
+            Snackbar(text="Nota renomeada!").open()
             
     def delete_note(self):
         if len(self.filemanager.files) <= 1: return Snackbar(text="Deve haver pelo menos uma nota!").open()
-        self.filemanager.delete(self.tabs.get_current_tab().title)
-        self.tabs.remove_widget(self.tabs.get_current_tab())
+        new_order = self.filemanager.get_conf('order').split(',')
+        index = new_order.index(self.root.notes.selected)
+        new_order.pop(index)
+        self.filemanager.save_conf('order', ','.join(new_order))
+        self.filemanager.delete(self.root.notes.selected)
+        self.switch_note(new_order[index + (1 if index == 0 else -1)])
         Snackbar(text="Nota excluida!").open()
-        self.save_tabs_order()
-            
-    def on_tab_switch(self, *args):
-        Clock.schedule_once(lambda dt: self.filemanager.save_conf("last_opened", self.tabs.get_current_tab().title), 0.5)
-    
-    def save_tabs_order(self):
-        order = []
-        for i in self.tabs.get_slides():
-            order.append(i.title)
-        self.filemanager.save_conf("order", ",".join(order))
         
     def change_tone(self, how_much):
-        tab = self.tabs.get_current_tab()
-        tab.ids.textfield._undo.append(
+        self.root.textfield._undo.append(
             {
                 'undo_command': (
                     'delsel', 
                     0, 
-                    tab.ids.textfield.text
+                    self.root.textfield.text
                 ), 
                 'redo_command': (
                     0,
-                    len(tab.ids.textfield.text)
+                    len(self.root.textfield.text)
                 )
             }
         )
-        lyric = TONECHANGER.semitone_lyric(tab.ids.textfield.text, how_much)
-        tab.ids.textfield.text = ""
-        tab.ids.textfield.insert_text(lyric)
+        lyric = TONECHANGER.semitone_lyric(self.root.textfield.text, how_much)
+        self.root.textfield.text = ""
+        self.root.textfield.insert_text(lyric)
         
     def save_changes(self, title, text):
-        if hasattr(self, "tabs"): self.filemanager.save(title, text)
+        self.filemanager.save(title, text)
         
     def get_files_order(self):
         return self.filemanager.get_conf('order').split(',')
