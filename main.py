@@ -6,7 +6,7 @@ from kivy.lang import Builder
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.snackbar import Snackbar
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, DictProperty
 
 if platform.system() == 'Windows':
     from kivy.core.window import Window
@@ -15,8 +15,11 @@ if platform.system() == 'Windows':
 
 class CifraNoteApp(MDApp, Control):
     font_size = StringProperty(Control.filemanager.get_conf("font_size"))
-    save_when_stop = []
-    file_data = {}
+    file_data = DictProperty({})
+    
+    def on_file_data(self, a, b):
+        print(self.file_data)
+        pass
     
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -25,7 +28,7 @@ class CifraNoteApp(MDApp, Control):
     
     def actionbarbutton(self, button):
         if "menu" in button.icon:
-            self.root.lm.rv.data = [{'text': i, 'selected': i == self.root.notes.selected} for i in self.get_files_order()]
+            self.root.lm.rv.data = [{'text': i, 'selected': i == self.notes.selected} for i in self.get_files_order()]
             self.root.lm.open()
         elif "music" in button.icon:
             self.change_tone(1 if "sharp" in button.icon else -1)
@@ -40,23 +43,29 @@ class CifraNoteApp(MDApp, Control):
         elif 'trash' in button.icon:
             self.deleting_dialog.open()
     
-    def update_notes(self):
-        self.root.notes.data = []
-        for i in self.get_files_order():
-            self.root.notes.data.append({'text': i, 'selected': i == self.root.notes.selected})
-            if i not in self.file_data: self.file_data[i] = self.filemanager.load(i)
-        self.filemanager.save_conf('order', ','.join(self.get_files_order()))
+    def update_selected(self):
+        self.notes.data = [{'text': title, 'selected': title == self.notes.selected} for title in self.get_files_order()]
+    
+    def save_note_data(self, title, data=False):
+        self.file_data[title] = self.textfield.text if data == False else data
+    
+    def new_note(self, title):
+        self.file_data[title] = ''
+    
+    def delete_note_data(self, title):
+        data = {key: value for key, value in self.file_data.items() if key != title}
+        self.file_data = data
     
     def on_font_size(self, instance, value):
         Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
     
-    def switch_note(self, title):
-        self.file_data[self.root.notes.selected] = self.root.textfield.text
-        self.root.notes.selected = title
-        self.update_notes()
-        self.root.textfield.text = self.file_data[title]
-        self.root.textfield_scroll.scroll_y = 1
-        self.filemanager.save_conf("last_opened", title)
+    def switch_note(self, title, saves_current=True):
+        #Saves the current note
+        if saves_current: self.save_note_data(self.notes.selected)
+        #Changes
+        self.notes.selected = title
+        self.filemanager.save_conf('last_opened', title)
+        self.update_selected()
             
     def change_font_size(self, increase=True):
         number = self.font_size.replace("sp", "")
@@ -68,8 +77,10 @@ class CifraNoteApp(MDApp, Control):
     
     def on_start(self):
         self.link = lambda: webbrowser.open("https://github.com/Felifelps")
-        self.update_notes()
-        self.switch_note(self.filemanager.get_conf('last_opened'))
+        self.file_data = {title: self.filemanager.load(title) for title in self.get_files_order()}
+        self.notes, self.textfield = self.root.ids._notes, self.root.ids._textfield
+        self.textfield.text = self.file_data[self.notes.selected]
+        self.switch_note(self.notes.selected)
         self.naming_dialog = MDDialog(
             title="Criar nota",
             type="custom",
@@ -116,10 +127,10 @@ class CifraNoteApp(MDApp, Control):
         return super().on_start()
 
     def on_stop(self):
-        self.file_data[self.root.notes.selected] = self.root.textfield.text
+        self.save_note_data(self.notes.selected)
+        self.filemanager.save_conf('last_opened', self.notes.selected)
         for title, data in self.file_data.items():
-            if title in self.get_files_order():
-                self.save_changes(title, data)
+            self.filemanager.save(title, data)
         return super().on_stop()
 
     def on_pause(self):

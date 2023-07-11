@@ -215,7 +215,6 @@
 MDScreen:
     id: _screen
     lm: _lm
-    notes: _notes
     textfield: _textfield
     textfield_scroll: _textfield_scroll
     MDBoxLayout:
@@ -226,9 +225,12 @@ MDScreen:
             size_hint: 1, .8
             NotesCarousel:
                 id: _notes
-                selected: ''
+                selected: app.filemanager.get_conf('last_opened')
                 size_hint: 1, .1
                 pos_hint: {'center_x': .5, 'top': 1}
+                on_selected:
+                    _textfield_scroll.scroll_y = 1
+                    _textfield.text = app.file_data[self.selected]
             ScrollView:
                 id: _textfield_scroll
                 size_hint: 1, .9

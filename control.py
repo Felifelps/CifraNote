@@ -38,9 +38,6 @@ class RenamingDialogContent(MDBoxLayout):
     
 class Control:
     filemanager = FILEMANAGER
-    def menu_callback(self, item):
-        self.menu.dismiss()
-        
     def create_new_note(self, title):
         self.naming_dialog.content_cls.ids.textfield.text = ""
         if title == "": Snackbar(text="Nome vazio!").open()
@@ -48,6 +45,7 @@ class Control:
         else:
             self.filemanager.save(title, "")
             self.filemanager.save_conf('order', self.filemanager.get_conf('order') + ',' + title)
+            self.new_note(title)
             self.switch_note(title)
             Snackbar(text="Nota criada!").open()
     
@@ -57,25 +55,30 @@ class Control:
         elif title in self.filemanager.files: Snackbar(text="Nota já existente!").open()
         elif self.filemanager.files == []: Snackbar(text="Não há notas para renomear").open()
         else:
+            #Order
             new_order = self.filemanager.get_conf('order').split(',')
-            index = new_order.index(self.root.notes.selected)
+            index = new_order.index(self.notes.selected)
             new_order.pop(index)
             new_order.insert(index, title)
             self.filemanager.save_conf('order', ','.join(new_order))
-            self.filemanager.rename(self.root.notes.selected, title)
-            self.file_data[title] = self.file_data.pop(self.root.notes.selected)
-            self.switch_note(title)
+            #File
+            self.filemanager.rename(self.notes.selected, title)
+            self.save_note_data(title)
+            self.delete_note_data(self.notes.selected)
+            self.switch_note(title, False)
             Snackbar(text="Nota renomeada!").open()
             
     def delete_note(self):
         if len(self.filemanager.files) <= 1: return Snackbar(text="Deve haver pelo menos uma nota!").open()
         new_order = self.filemanager.get_conf('order').split(',')
-        index = new_order.index(self.root.notes.selected)
+        index = new_order.index(self.notes.selected)
         new_order.pop(index)
+        last_opened = new_order[index + ((1 if len(new_order) > 1 else 0) if index == 0 else -1)]
         self.filemanager.save_conf('order', ','.join(new_order))
-        self.filemanager.delete(self.root.notes.selected)
-        self.file_data.pop(self.root.notes.selected)
-        self.switch_note(new_order[index + (1 if index == 0 else -1)])
+        self.filemanager.save_conf('last_opened', last_opened)
+        self.filemanager.delete(self.notes.selected)
+        self.delete_note_data(self.notes.selected)
+        self.switch_note(last_opened)
         Snackbar(text="Nota excluida!").open()
         
     def change_tone(self, how_much):
@@ -95,9 +98,6 @@ class Control:
         lyric = TONECHANGER.semitone_lyric(self.root.textfield.text, how_much)
         self.root.textfield.text = ""
         self.root.textfield.insert_text(lyric)
-        
-    def save_changes(self, title, text):
-        self.filemanager.save(title, text)
         
     def get_files_order(self):
         return self.filemanager.get_conf('order').split(',')

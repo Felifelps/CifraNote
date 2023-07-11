@@ -69,7 +69,8 @@ tutorial: True
         for line in text.split("\n"):
             if conf in line:
                 with open("conf", "w") as conf_file:
-                    return conf_file.write(text.replace(line, conf + ": " + value))
+                    conf_file.write(text.replace(line, conf + ": " + value))
+                    return text.replace(line, conf + ": " + value)
     
     def get_conf(self, conf):
         for line in self.conf().split("\n"):
