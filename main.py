@@ -16,10 +16,7 @@ if platform.system() == 'Windows':
 class CifraNoteApp(MDApp, Control):
     font_size = StringProperty(Control.filemanager.get_conf("font_size"))
     file_data = DictProperty({})
-    
-    def on_file_data(self, a, b):
-        print(self.file_data)
-        pass
+    undo_data = DictProperty({})
     
     def build(self):
         self.theme_cls.theme_style = "Dark"
@@ -48,13 +45,17 @@ class CifraNoteApp(MDApp, Control):
     
     def save_note_data(self, title, data=False):
         self.file_data[title] = self.textfield.text if data == False else data
+        self.undo_data[title] = self.textfield._undo
     
     def new_note(self, title):
         self.file_data[title] = ''
+        self.undo_data[title] = []
     
     def delete_note_data(self, title):
         data = {key: value for key, value in self.file_data.items() if key != title}
         self.file_data = data
+        data = {key: value for key, value in self.undo_data.items() if key != title}
+        self.undo_data = data
     
     def on_font_size(self, instance, value):
         Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.5).open()
@@ -65,6 +66,7 @@ class CifraNoteApp(MDApp, Control):
         #Changes
         self.notes.selected = title
         self.filemanager.save_conf('last_opened', title)
+        self.textfield._undo = self.undo_data[title]
         self.update_selected()
             
     def change_font_size(self, increase=True):
@@ -78,6 +80,7 @@ class CifraNoteApp(MDApp, Control):
     def on_start(self):
         self.link = lambda: webbrowser.open("https://github.com/Felifelps")
         self.file_data = {title: self.filemanager.load(title) for title in self.get_files_order()}
+        self.undo_data = {title: [] for title in self.get_files_order()}
         self.notes, self.textfield = self.root.ids._notes, self.root.ids._textfield
         self.textfield.text = self.file_data[self.notes.selected]
         self.switch_note(self.notes.selected)

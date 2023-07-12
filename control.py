@@ -82,22 +82,22 @@ class Control:
         Snackbar(text="Nota excluida!").open()
         
     def change_tone(self, how_much):
-        self.root.textfield._undo.append(
+        self.textfield._undo.append(
             {
                 'undo_command': (
                     'delsel', 
                     0, 
-                    self.root.textfield.text
+                    self.textfield.text
                 ), 
                 'redo_command': (
                     0,
-                    len(self.root.textfield.text)
+                    len(self.textfield.text)
                 )
             }
         )
-        lyric = TONECHANGER.semitone_lyric(self.root.textfield.text, how_much)
-        self.root.textfield.text = ""
-        self.root.textfield.insert_text(lyric)
+        lyric = TONECHANGER.semitone_lyric(self.textfield.text, how_much)
+        self.textfield.text = ""
+        self.textfield.insert_text(lyric)
         
     def get_files_order(self):
         return self.filemanager.get_conf('order').split(',')
