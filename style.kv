@@ -225,7 +225,7 @@ MDScreen:
             size_hint: 1, .8
             NotesCarousel:
                 id: _notes
-                selected: app.filemanager.get_conf('last_opened')
+                selected: app.conf['options']['last_opened']
                 size_hint: 1, .1
                 pos_hint: {'center_x': .5, 'top': 1}
                 on_selected:
