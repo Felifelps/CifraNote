@@ -1,4 +1,4 @@
-import webbrowser, platform, configparser
+import webbrowser, platform, configparser, plyer
 
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
@@ -10,6 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextFieldRect, MDTextField
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty, DictProperty, ObjectProperty
+from kivy.core.window import WindowBase
 
 from tonechanger import TONECHANGER
 
@@ -43,9 +44,6 @@ class CifraNoteApp(MDApp):
         self.conf = configparser.ConfigParser()
         self.conf.read('config.ini')
         self.files = JsonStore('files.json')
-        if self.conf['options']['tutorial'] == 'True': 
-            self.files.put('Tutorial', data=TUTORIAL)
-            self.conf['options']['tutorial'] = 'False'
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Brown"
         return Builder.load_file('style.kv')
@@ -277,4 +275,11 @@ class RenamingDialogContent(MDBoxLayout):
     """Content of renaming dialog"""
 
 if __name__ == '__main__':
-    CifraNoteApp().run()
+    try:
+        CifraNoteApp().run()
+    except Exception as e:
+        print(e)
+        import sys, os
+        print(plyer.facades.StoragePath().get_downloads_dir())
+        with open(os.path.join(plyer.facades.StoragePath().get_downloads_dir(), 'log.txt'), 'w') as file:
+            file.write(sys.stdout.read())

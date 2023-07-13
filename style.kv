@@ -1,6 +1,7 @@
 #:kivy 1.9.0
 #:import colors kivymd.color_definitions
 #:import Animation kivy.animation.Animation
+#:import WindowBase kivy.core.window.WindowBase
 
 <LimitTextInput>:
     limit: 100
@@ -159,6 +160,7 @@
 
 <BottomBar@Bar>:
     radius: [15, 15, 0, 0]
+    y: WindowBase().keyboard_height
     MDIconButton:
         icon: 'undo'
         size_hint_x: .25 
