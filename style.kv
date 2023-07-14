@@ -56,11 +56,6 @@
             pos: 0, 0
             size: self.width*1.25, self.height
 
-<OptionButton@MDTextButton>:
-    size_hint: 1, .33
-    font_size: '17.5sp'
-    haling: 'center'
-
 <TextButton@MDRectangleFlatButton>:
     line_color: 1, 1, 1, 0
     theme_text_color: "Custom"
@@ -133,18 +128,25 @@
     MDBoxLayout:
         md_bg_color: .2, .2, .2, 1
         radius: [0, 25, 0, 0]
-        size_hint: 1, .2
+        size_hint: 1, .15
         pos_hint: {'top': .9}
         padding: dp(10)
         orientation: 'vertical'
-        OptionButton:
-            text: 'Aumentar fonte'
-            on_press: app.change_font_size()
-        OptionButton:
-            text: 'Diminuir fonte'
-            on_press: app.change_font_size(False)
-        OptionButton:
+        MDBoxLayout:
+            size_hint: 1, .5
+            MDIconButton:
+                icon: 'minus'
+                on_press: app.change_font_size(False)
+            Label:
+                text: f'Fonte: {app.font_size}'.replace('sp', '')
+            MDIconButton:
+                icon: 'plus'
+                on_press: app.change_font_size()
+        MDTextButton:
             text: 'Sobre'
+            size_hint: 1, .5
+            font_size: '17.5sp'
+            haling: 'center'
             on_press: app.link()
     MDLabel:
         md_bg_color: .2, .2, .2, 1

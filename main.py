@@ -30,6 +30,18 @@ C G Am F
 
 Ademais, mantenha as cifras salvas aqui (enquanto mantiver o app instalado) e tenha controle sobre o tamanho do texto (menu no canto superior direito).
 
+Divirta-se!!###TUTORIAL###
+Seja bem-vindo ao CifraNote!!
+
+Esse é um app para músicos, então se você se sentir um pouco perdido já sabe para quem perguntar. 
+
+A principal função desse app é facilitar a troca de tom de cifras. Você pode fazer isso apenas colando uma cifra aqui, ou a escrevendo por si só, e usando os botões "b" e "#" abaixo para diminuir ou aumentar, respectivamente, meio-tom da cifra.
+
+Faça um teste (clique em "b" ou "#" abaixo):
+C G Am F
+
+Ademais, mantenha as cifras salvas aqui (enquanto mantiver o app instalado) e tenha controle sobre o tamanho do texto (menu no canto superior direito).
+
 Divirta-se!!
 """
 
@@ -85,9 +97,6 @@ class CifraNoteApp(MDApp):
         data = {key: value for key, value in self.redo_data.items() if key != title}
         self.redo_data = data
     
-    def on_font_size(self, instance, value):
-        Snackbar(text="Fonte atual: " + self.font_size.replace("sp", ""), duration=0.1).open()
-    
     def switch_note(self, title, saves_current=True):
         #Saves the current note
         if saves_current: self.save_note_data(self.notes.selected)
@@ -106,7 +115,12 @@ class CifraNoteApp(MDApp):
             self.font_size = self.font_size.replace(number, str(int(number) - 1))
         self.conf["options"]['font_size'] = self.font_size
     
+    def advice(self, text):
+        self.dialog.text = text
+        self.dialog.open()
+    
     def on_start(self):
+        self.dialog = MDDialog(title='Atenção!', text='')
         self.link = lambda: webbrowser.open("https://github.com/Felifelps")
         self.font_size = self.conf['options']['font_size']
         self.file_data = {title: self.files.get(title)['data'] for title in self.get_files_order()}
@@ -183,8 +197,8 @@ class CifraNoteApp(MDApp):
 
     def create_new_note(self, title):
         self.naming_dialog.content_cls.ids.textfield.text = ""
-        if title == "": Snackbar(text="Nome vazio!").open()
-        elif title in self.file_data: Snackbar(text="Nota já existente!").open()
+        if title == "": self.advice("Nome vazio!")
+        elif title in self.file_data: self.advice("Nota já existente!")
         else:
             self.files.put(title, data="")
             self.conf['options']['order'] = self.conf['options']['order'] + ',' + title
@@ -194,8 +208,8 @@ class CifraNoteApp(MDApp):
     
     def rename_note(self, title):
         self.renaming_dialog.content_cls.ids.textfield.text = ""
-        if title == "": Snackbar(text="Nome vazio!").open()
-        elif title in self.file_data: Snackbar(text="Nota já existente!").open()
+        if title == "": self.advice("Nome vazio!")
+        elif title in self.file_data: self.advice("Nota já existente!")
         else:
             #Order
             new_order =  self.conf['options']['order'].split(',')
@@ -212,13 +226,13 @@ class CifraNoteApp(MDApp):
             Snackbar(text="Nota renomeada!").open()
             
     def delete_note(self):
-        if len(self.file_data) <= 1: return Snackbar(text="Deve haver pelo menos uma nota!").open()
+        if len(self.get_files_order()) < 2: return self.advice("Deve haver pelo menos uma nota!")
         new_order = self.conf['options']['order'].split(',')
         index = new_order.index(self.notes.selected)
         new_order.pop(index)
         self.conf['options']['order'] = ','.join(new_order)
-        self.files.delete(self.notes.selected)
         self.delete_note_data(self.notes.selected)
+        self.files.delete(self.notes.selected)
         self.switch_note(new_order[index + ((1 if len(new_order) > 1 else 0) if index == 0 else -1)])
         Snackbar(text="Nota excluida!").open()
         
@@ -242,7 +256,7 @@ class CifraNoteApp(MDApp):
         
     def get_files_order(self):
         return self.conf['options']['order'].split(',')
-
+    
 class LimitTextInput(MDTextField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
