@@ -1,4 +1,4 @@
-import webbrowser, platform, configparser, plyer
+import webbrowser, platform, configparser
 
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
@@ -222,8 +222,7 @@ class CifraNoteApp(MDApp):
         self.switch_note(new_order[index + ((1 if len(new_order) > 1 else 0) if index == 0 else -1)])
         Snackbar(text="Nota excluida!").open()
         
-    def change_tone(self, how_much):
-        MDDialog(text='\n'.join([plyer.facades.StoragePath().get_home_dir(), plyer.facades.StoragePath().get_documents_dir()])).open()
+    def change_tone(self, how_much)
         self.textfield._undo.append(
             {
                 'undo_command': (
