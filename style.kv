@@ -1,7 +1,6 @@
 #:kivy 1.9.0
 #:import colors kivymd.color_definitions
 #:import Animation kivy.animation.Animation
-#:import WindowBase kivy.core.window.WindowBase
 
 <LimitTextInput>:
     limit: 100
@@ -160,7 +159,6 @@
 
 <BottomBar@Bar>:
     radius: [15, 15, 0, 0]
-    y: WindowBase().keyboard_height
     MDIconButton:
         icon: 'undo'
         size_hint_x: .25 
@@ -219,12 +217,16 @@ MDScreen:
     lm: _lm
     textfield: _textfield
     textfield_scroll: _textfield_scroll
-    MDBoxLayout:
-        orientation: "vertical"
+    MDFloatLayout:
+        Label:
+            text: str(WindowBase().keyboard_height)
+            pos_hint: {'right': 1, 'top': 1}
         TopBar:
             size_hint: 1, .1
+            pos_hint: {'center_x': .5, 'top': 1}
         RelativeLayout:
             size_hint: 1, .8
+            pos_hint: {'center_x': .5, 'top': .9}
             NotesCarousel:
                 id: _notes
                 selected: app.conf['options']['last_opened']
@@ -243,7 +245,7 @@ MDScreen:
                     size_hint: 1, None
                     height: _screen.height * 0.825 if self.minimum_height < _screen.height * 0.825 else self.minimum_height + _screen.height*0.6
         BottomBar:
+            pos_hint: {'center_x': .5, 'y': 0}
             size_hint: 1, .1
-            pos_hint: {'y': 0}
     LateralMenu:
         id: _lm

@@ -10,7 +10,6 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextFieldRect, MDTextField
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty, DictProperty, ObjectProperty
-from kivy.core.window import WindowBase
 
 from tonechanger import TONECHANGER
 
@@ -224,6 +223,7 @@ class CifraNoteApp(MDApp):
         Snackbar(text="Nota excluida!").open()
         
     def change_tone(self, how_much):
+        MDDialog(text='\n'.join([plyer.facades.StoragePath().get_home_dir(), plyer.facades.StoragePath().get_documents_dir()])).open()
         self.textfield._undo.append(
             {
                 'undo_command': (
@@ -275,11 +275,4 @@ class RenamingDialogContent(MDBoxLayout):
     """Content of renaming dialog"""
 
 if __name__ == '__main__':
-    try:
-        CifraNoteApp().run()
-    except Exception as e:
-        print(e)
-        import sys, os
-        print(plyer.facades.StoragePath().get_downloads_dir())
-        with open(os.path.join(plyer.facades.StoragePath().get_downloads_dir(), 'log.txt'), 'w') as file:
-            file.write(sys.stdout.read())
+    CifraNoteApp().run()
