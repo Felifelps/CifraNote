@@ -3,18 +3,18 @@ import webbrowser, platform, configparser
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
 from kivy.storage.jsonstore import JsonStore
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDFlatButton, MDTextButton
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextFieldRect, MDTextField
 from kivymd.uix.snackbar import Snackbar
 from kivy.properties import StringProperty, DictProperty, ObjectProperty
+from kivy.core.window import Window
 
 from tonechanger import TONECHANGER
 
 if platform.system() == 'Windows':
-    from kivy.core.window import Window
     from kivy.metrics import dp
     Window.size = (dp(400), dp(700))
 
@@ -78,7 +78,7 @@ class CifraNoteApp(MDApp):
     
     def update_selected(self):
         self.notes.data = [{'text': title, 'selected': title == self.notes.selected} for title in self.get_files_order()]
-    
+        
     def save_note_data(self, title, data=False):
         self.file_data[title] = self.textfield.text if data == False else data
         self.undo_data[title] = self.textfield._undo
@@ -101,10 +101,10 @@ class CifraNoteApp(MDApp):
         #Saves the current note
         if saves_current: self.save_note_data(self.notes.selected)
         #Changes
-        self.notes.selected = title
         self.conf['options']['last_opened'] = title
         self.textfield._undo = self.undo_data[title]
         self.textfield._redo = self.redo_data[title]
+        self.notes.selected = title
         self.update_selected()
             
     def change_font_size(self, increase=True):
@@ -119,6 +119,15 @@ class CifraNoteApp(MDApp):
         self.dialog.text = text
         self.dialog.open()
     
+    def adjust_bottombar_height(self, instance, keyboard, keycode, text, modifiers):
+        if keyboard:
+            #keyboard down
+            if keycode == 40:
+                self.root.bottombar.y = 0
+            #keyboard up
+            elif keycode == 41:
+                self.root.bottombar.y = self.root_window.keyboard_height
+        
     def on_start(self):
         self.dialog = MDDialog(title='Atenção!', text='')
         self.link = lambda: webbrowser.open("https://github.com/Felifelps")
@@ -126,10 +135,11 @@ class CifraNoteApp(MDApp):
         self.file_data = {title: self.files.get(title)['data'] for title in self.get_files_order()}
         self.undo_data = {title: [] for title in self.get_files_order()}
         self.redo_data = {title: [] for title in self.get_files_order()}
-        self.notes, self.textfield = self.root.ids._notes, self.root.ids._textfield
+        self.notes, self.textfield = self.root.notes, self.root.textfield
         self.textfield.text = self.file_data[self.notes.selected]
         self.dialogs()
         self.switch_note(self.notes.selected)
+        Window.unbind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     
     def dialogs(self):
@@ -137,6 +147,7 @@ class CifraNoteApp(MDApp):
             title="Criar nota",
             type="custom",
             content_cls=NamingDialogContent(),
+            size_hint=(.8, None),
             buttons=[
                 MDFlatButton(
                     text="Sair",
@@ -152,6 +163,7 @@ class CifraNoteApp(MDApp):
             title="Renomear nota atual para:",
             type="custom",
             content_cls=RenamingDialogContent(),
+            size_hint=(.8, None),
             buttons=[
                 MDFlatButton(
                     text="Sair",
@@ -165,6 +177,7 @@ class CifraNoteApp(MDApp):
         )
         self.deleting_dialog = MDDialog(
             title="Excluir nota atual?",
+            size_hint=(.8, None),
             buttons=[
                 MDFlatButton(
                     text="Sair",
@@ -260,6 +273,7 @@ class CifraNoteApp(MDApp):
 class LimitTextInput(MDTextField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.to_widget
         self.limit_snack = Snackbar(text='Limite de caracteres atingido')
         
     def insert_text(self, substring, from_undo=False):

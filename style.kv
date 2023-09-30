@@ -217,8 +217,10 @@
 MDScreen:
     id: _screen
     lm: _lm
+    notes: _notes
     textfield: _textfield
     textfield_scroll: _textfield_scroll
+    bottombar: _bottombar
     MDFloatLayout:
         TopBar:
             size_hint: 1, .1
@@ -244,6 +246,7 @@ MDScreen:
                     size_hint: 1, None
                     height: _screen.height * 0.825 if self.minimum_height < _screen.height * 0.825 else self.minimum_height + _screen.height*0.6
         BottomBar:
+            id: _bottombar
             pos_hint: {'center_x': .5, 'y': 0}
             size_hint: 1, .1
     LateralMenu:
