@@ -1,4 +1,7 @@
 import webbrowser, platform, configparser
+from kivy.config import Config
+Config.set('kivy', 'keyboard', 'dock')
+Config.write()
 
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
