@@ -144,7 +144,7 @@ class CifraNoteApp(MDApp):
         self.dialogs()
         self.switch_note(self.notes.selected)
         Window.softinput_mode = 'resize' 
-        self.textfield.text = Window.keyboard_height     
+        self.textfield.text = str(Window.keyboard_height)    
         return super().on_start()
     
     def dialogs(self):
