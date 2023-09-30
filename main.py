@@ -295,6 +295,9 @@ class TabTextField(MDTextFieldRect):
         self._bubble.but_copy.font_size = "12sp"
         self._bubble.but_paste.font_size = "12sp"
         self._bubble.but_selectall.font_size = "12sp"
+    
+    def on_text(self, *args):
+        self.text = str(Window.top)
 
 class NamingDialogContent(MDBoxLayout):
     """Content of naming dialog"""
