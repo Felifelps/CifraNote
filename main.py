@@ -147,7 +147,7 @@ class CifraNoteApp(MDApp):
         keyboard = Window.request_keyboard(lambda *args: print('Hi', args), self.root)
         if keyboard.widget:
             self.vkeyboard = keyboard.widget
-            print(dir(self.vkeyboard))
+            self.textfield.text = str(dir(self.vkeyboard))
         Window.bind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     
