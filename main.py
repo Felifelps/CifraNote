@@ -143,10 +143,7 @@ class CifraNoteApp(MDApp):
         self.textfield.text = self.file_data[self.notes.selected]
         self.dialogs()
         self.switch_note(self.notes.selected)
-        
-        
-        self.textfield.text = str(Window.keyboard_height)
-        Window.bind(on_keyboard=self.adjust_bottombar_height)
+        Window.softinput_mode('pan')        
         return super().on_start()
     
     def dialogs(self):
