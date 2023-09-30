@@ -58,6 +58,9 @@ class CifraNoteApp(MDApp):
         self.theme_cls.theme_style = "Dark"
         self.theme_cls.primary_palette = "Brown"
         return Builder.load_file('style.kv')
+    
+    def on_textinput_focus(self, **args):
+        print('Focus')
         
     def actionbarbutton(self, button):
         if "menu" in button.icon:
@@ -140,6 +143,11 @@ class CifraNoteApp(MDApp):
         self.textfield.text = self.file_data[self.notes.selected]
         self.dialogs()
         self.switch_note(self.notes.selected)
+        
+        keyboard = Window.request_keyboard(lambda *args: print('Hi', args), self.root)
+        if keyboard.widget:
+            self.vkeyboard = keyboard.widget
+            print(dir(self.vkeyboard))
         Window.bind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     

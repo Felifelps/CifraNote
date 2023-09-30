@@ -243,6 +243,9 @@ MDScreen:
                 scroll_distance: dp(1)
                 TabTextField:
                     id: _textfield
+                    input_type: 'text'
+                    keyboard_suggestions: True
+                    on_focus: app.on_textinput_focus()
                     size_hint: 1, None
                     height: _screen.height * 0.825 if self.minimum_height < _screen.height * 0.825 else self.minimum_height + _screen.height*0.6
         BottomBar:
