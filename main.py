@@ -148,6 +148,8 @@ class CifraNoteApp(MDApp):
         if keyboard.widget:
             self.vkeyboard = keyboard.widget
             self.textfield.text = str(dir(self.vkeyboard))
+        else:
+            self.textfield.text = 'Nada'
         Window.bind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     
