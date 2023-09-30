@@ -1,7 +1,4 @@
 import webbrowser, platform, configparser
-from kivy.config import Config
-Config.set('kivy', 'keyboard', 'dock')
-Config.write()
 
 from kivymd.app import MDApp 
 from kivy.lang import Builder 
@@ -63,7 +60,7 @@ class CifraNoteApp(MDApp):
         return Builder.load_file('style.kv')
     
     def on_textinput_focus(self, **args):
-        print('Focus')
+        self.textfield.text = str(Window.top)
         
     def actionbarbutton(self, button):
         if "menu" in button.icon:
@@ -147,7 +144,8 @@ class CifraNoteApp(MDApp):
         self.dialogs()
         self.switch_note(self.notes.selected)
         Window.softinput_mode = 'resize' 
-        self.textfield.text = str(Window.keyboard_height)    
+        self.textfield.text = str(Window.keyboard_height)   
+        self.size = Window.size 
         return super().on_start()
     
     def dialogs(self):
