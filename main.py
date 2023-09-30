@@ -121,6 +121,7 @@ class CifraNoteApp(MDApp):
     
     def adjust_bottombar_height(self, instance, keyboard, keycode, text, modifiers):
         if keyboard:
+            Snackbar(text=str(keycode)).open()
             #keyboard down
             if keycode == 40:
                 self.root.bottombar.y = 0
@@ -139,7 +140,7 @@ class CifraNoteApp(MDApp):
         self.textfield.text = self.file_data[self.notes.selected]
         self.dialogs()
         self.switch_note(self.notes.selected)
-        Window.unbind(on_keyboard=self.adjust_bottombar_height)
+        Window.bind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     
     def dialogs(self):
