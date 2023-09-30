@@ -203,11 +203,6 @@ class CifraNoteApp(MDApp):
         self.on_stop()
         return super().on_pause()
 
-    def on_resume(self):
-        self.stopped = Snackbar(text='Carregando dados salvos...')
-        self.stopped.open()
-        return super().on_resume()
-
     def create_new_note(self, title):
         self.naming_dialog.content_cls.ids.textfield.text = ""
         if title == "": self.advice("Nome vazio!")
