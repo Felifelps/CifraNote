@@ -145,6 +145,7 @@ class CifraNoteApp(MDApp):
         self.switch_note(self.notes.selected)
         
         keyboard = Window.request_keyboard(lambda *args: print('Hi', args), self.root)
+        self.textfield.text = str(keyboard.widget)
         if keyboard.widget:
             self.vkeyboard = keyboard.widget
             self.textfield.text = str(dir(self.vkeyboard))
