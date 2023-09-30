@@ -144,13 +144,8 @@ class CifraNoteApp(MDApp):
         self.dialogs()
         self.switch_note(self.notes.selected)
         
-        keyboard = Window.request_keyboard(lambda *args: print('Hi', args), self.root)
-        if keyboard.widget:
-            self.vkeyboard = keyboard.widget
-            self.textfield.text = str(dir(self.vkeyboard))
-        else:
-            self.textfield.text = 'Nada'
-        self.textfield.text = str(keyboard.widget)
+        
+        self.textfield.text = str(Window.keyboard_height)
         Window.bind(on_keyboard=self.adjust_bottombar_height)
         return super().on_start()
     
