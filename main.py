@@ -271,6 +271,13 @@ class CifraNoteApp(MDApp):
     def get_files_order(self):
         return self.conf['options']['order'].split(',')
     
+    def on_keyboard(self, instance, value):
+        # Ajuste a altura da barra inferior quando o teclado é exibido/oculto
+        if value:
+            self.root.bottombar.y = instance.keyboard_height  # Ajuste conforme necessário
+        else:
+            self.root.bottombar.y = 0
+    
 class LimitTextInput(MDTextField):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -295,9 +302,6 @@ class TabTextField(MDTextFieldRect):
         self._bubble.but_copy.font_size = "12sp"
         self._bubble.but_paste.font_size = "12sp"
         self._bubble.but_selectall.font_size = "12sp"
-    
-    def on_text(self, *args):
-        self.text = str(Window.top)
 
 class NamingDialogContent(MDBoxLayout):
     """Content of naming dialog"""
