@@ -1,1 +1,5 @@
-{"Tutorial": {"data": "132"}}
+{
+    "Tutorial": {
+        "data": "###TUTORIAL###\nSeja bem-vindo ao CifraNote!!\nEsse é um app para músicos, então se você se sentir um pouco perdido já sabe para quem perguntar. \nA principal função desse app é facilitar a troca de tom de cifras. Você pode fazer isso apenas colando uma cifra aqui, ou a escrevendo por si só, e usando os botões \"b\" e \"#\" abaixo para diminuir ou aumentar, respectivamente, meio-tom da cifra.\nFaça um teste (clique em \"b\" ou \"#\" abaixo):\nC G Am F\nAdemais, mantenha as cifras salvas aqui (enquanto mantiver o app instalado) e tenha controle sobre o tamanho do texto (menu no canto superior direito).\nDivirta-se!!"
+    }
+}
