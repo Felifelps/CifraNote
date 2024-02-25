@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "cifranote"
+version = "0.1.0"
+description = "A app for guitar players"
+authors = ["Felifelps <felipefelipe23456@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flet = "^0.20.2"
+peewee = "^3.17.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
