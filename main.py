@@ -1,5 +1,9 @@
 import flet as ft
 
-from cifranote import main
+from CifraNote import main
 
-ft.app(target=main)
+ft.app(
+    name='CifraNote',
+    target=main,
+    view=ft.AppView.FLET_APP_WEB
+)

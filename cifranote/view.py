@@ -1,6 +1,16 @@
 import flet as ft
 
-from .components import *
+from .components import (
+    Control,
+    create_appbar,
+    create_bottom_menu_bar,
+    create_delete_dialog,
+    create_font_dialog,
+    create_new_dialog,
+    create_page_snackbar,
+    create_rename_dialog,
+    create_tabs
+)
 
 def main(page: ft.Page):
 
@@ -14,14 +24,23 @@ def main(page: ft.Page):
 
     page.theme_mode = "dark"
 
-    new_dialog = create_new_dialog(page)
+    if not page.client_storage.get('font_size'):
+        page.client_storage.set('font_size', 15)
 
-    rename_dialog = create_rename_dialog(page)
+    create_new_dialog(page)
 
-    delete_dialog = create_delete_dialog(page)
+    create_rename_dialog(page)
 
-    page.appbar = create_appbar(page)
+    create_delete_dialog(page)
 
-    page.add(create_tabs(page))
+    create_page_snackbar(page)
 
-    page.add(create_bottom_menu_bar(page))
+    create_font_dialog(page)
+
+    create_appbar(page)
+
+    create_tabs(page)
+
+    create_bottom_menu_bar(page)
+
+    page.on_disconnect = lambda e: Control.save_current_note()
