@@ -21,12 +21,10 @@ class CustomTextField(ft.TextField):
         self.note_title = note_title
         self.__changes.append(self.value)
         self.on_change = self.__on_change
-        self.on_focus = self.__on_focus
-    
-    def __on_focus(self, e):
-        Control.current_textfield = self
     
     def __on_change(self, e):
+        Control.save_current_note()
+
         time.sleep(0.2)
         if self.value in self.__changes:
             return
@@ -52,13 +50,6 @@ class CustomTextField(ft.TextField):
         self.update()
 
 class CustomTabs(ft.Tabs):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.on_change = self.change
-    
-    def change(self, e):
-        Control.save_current_note()
-
     def add_tab(self, text, value="", **kwargs):
         tab = ft.Tab(
             text=text,

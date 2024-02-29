@@ -42,5 +42,3 @@ def main(page: ft.Page):
     create_tabs(page)
 
     create_bottom_menu_bar(page)
-
-    page.on_disconnect = lambda e: Control.save_current_note()
