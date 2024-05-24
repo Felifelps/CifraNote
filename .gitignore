@@ -1,5 +1,9 @@
 build
-
+dist
+windows
+android
 .vscode
-
-__pychache__
+**/__pychache__
+**.bat
+**.ico
+**.spec

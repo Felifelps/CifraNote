@@ -1,6 +1,6 @@
 import flet as ft
 
-from CifraNote import main
+from cifranote import main
 
 ft.app(
     name='CifraNote',
