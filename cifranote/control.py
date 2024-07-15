@@ -23,7 +23,7 @@ class ControlObject:
         self.tabs = tabs
         for note in Note.select():
             tabs.add_tab(note.title, note.text)
-    
+
     def set_notes_list(self, lv):
         self.notes_list = lv
         for note in Note.select():
@@ -36,7 +36,7 @@ class ControlObject:
             title=text,
             text=''
         )
-    
+
     def rename_note(self, old_text, new_text):
         self.tabs.rename_tab(old_text, new_text)
         self.notes_list.rename_note(old_text, new_text)
@@ -51,8 +51,8 @@ class ControlObject:
 
     def change_tone(self, sharp=True):
         new_text = ToneChanger.semitone_lyric(
-            self.current_textfield.value,
-            1 if sharp else -1
+            1 if sharp else -1,
+            self.current_textfield.value
         )
         self.current_textfield.value = new_text
         self.current_textfield.update()

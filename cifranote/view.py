@@ -1,16 +1,6 @@
 import flet as ft
 
-from .components import (
-    create_appbar,
-    create_bottom_menu_bar,
-    create_delete_dialog,
-    create_font_dialog,
-    create_new_dialog,
-    create_notes_dialog,
-    create_page_snackbar,
-    create_rename_dialog,
-    create_tabs
-)
+from cifranote.components import *
 
 def main(page: ft.Page):
 
