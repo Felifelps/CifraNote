@@ -1,68 +1,67 @@
 <p align="center">
-    <img src="/assets/icon.png" alt="Logo" width=200 height=200>
+    <img src="/assets/icon.png" alt="Logo" width="200" height="200">
 </p>
 
 # CifraNote
 
-O CifraNote é um bloco de notas com a função de trocar tons de cifras de violão.
+CifraNote is a notes app with the feature of changing the tones of guitar chords.
 
-## Funcionalidades
+## Functionalities
 
-- Criação de notas;
-- Troca de tema;
-- Troca de cifra entre notas.
+- CRUD operations for notes
+- Theme changing (dark/light mode)
+- Tone changing for chords
 
-## Tecnologias usadas
+## Technologies
 
-- Python;
-- Framework Flet;
-- Peewee, como *Object Relational Mapping*.
+- Python
+- Flet
+- Peewee
 
-## Instalação
+## Installation
 
-Para instalar o projeto, siga os seguintes passos:
+To install this project, follow these steps:
 
-1. [Instale o python](https://www.python.org/downloads/) mais recente em sua máquina
-2. Clone o projeto:
+1. [Install Python](https://www.python.org/downloads/) on your machine.
+2. Clone this project:
 
-    ```
+    ```shell
     git clone https://github.com/Felifelps/CifraNote CifraNote
-    ```
-
-3. Entre na pasta do projeto e instale o poetry:
-
-    ```
     cd CifraNote
+    ```
+
+3. Install Poetry (if not already installed):
+
+    ```shell
     pip install poetry
     ```
 
-4. Instale as dependências do projeto:
+4. Install the project dependencies using Poetry:
 
-    ```
+    ```shell
     poetry install
     ```
 
-5. Entre no terminal do projeto:
+5. Activate the virtual environment created by Poetry:
 
-    ```
+    ```shell
     poetry shell
     ```
 
-6. Para iniciar o projeto, rode o seguinte comando:
+6. Start the project:
 
-    ```
+    ```shell
     flet run main.py
     ```
 
 ### Windows
 
-[Windows release](https://github.com/Felifelps/CifraNote/releases/tag/windows)
+For Windows users, you can download the [Windows release](https://github.com/Felifelps/CifraNote/releases/tag/windows).
 
 ### Android
 
-[Android release](https://github.com/Felifelps/CifraNote/releases/tag/android)
+An [Android release](https://github.com/Felifelps/CifraNote/releases/tag/android) is also available.
 
+## Contribution
 
-## Contribuição
-
-Fique à vontade para fazer Forks e várias Pull Requests. Estou aberto a sugestões e melhorias.
+Fork this project, make your changes, and submit a pull request. I'll review it as soon as possible.
