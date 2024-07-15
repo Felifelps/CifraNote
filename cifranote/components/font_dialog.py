@@ -4,14 +4,17 @@ from cifranote.control import Control
 from .custom_modal import CustomModal
 
 def create_font_dialog(page: ft.Page):
+    default_size = 15
     text = ft.Text(
-        value='Tamanho do texto',
+        value=f'Tamanho da fonte: {default_size}',
         text_align=ft.TextAlign.CENTER,
-        size=15
+        size=default_size
     )
 
     def slider_changed(e):
-        text.size = int(e.control.value)
+        size = int(e.control.value)
+        text.size = size
+        text.value = f'Tamanho da fonte: {size}'
         text.update()
 
     slider = ft.Slider(

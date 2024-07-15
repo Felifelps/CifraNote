@@ -17,12 +17,12 @@ class CustomTab(ft.Tab):
                         ft.PopupMenuItem(
                             text="Renomear",
                             icon="drive_file_rename_outline",
-                            on_click=lambda _: Control.rename_dialog.open_dialog(text=self.tab.text)
+                            on_click=lambda _: Control.rename_dialog.open_dialog(text=self.value)
                         ),
                         ft.PopupMenuItem(
                             text="Excluir",
                             icon='delete',
-                            on_click=lambda _: Control.delete_dialog.open_dialog(text=self.tab.text),
+                            on_click=lambda _: Control.delete_dialog.open_dialog(text=self.text),
                         ),
                     ]
                 ),
