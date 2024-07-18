@@ -3,6 +3,8 @@ dist
 windows
 android
 .vscode
+.venv
+send_build.py
 **/__pychache__
 **.bat
 **.ico
